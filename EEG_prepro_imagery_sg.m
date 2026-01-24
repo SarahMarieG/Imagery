@@ -27,13 +27,13 @@ for subindex = 1:numel(folderNames)
     end
 end
 %% Second script using prepro_eegfmri_2
-% cd '/Users/sgardy/Documents/SarahData/Imagery/Data/rawEEG'
+cd '/Users/sgardy/Documents/SarahData/Imagery/Data/rawEEG'
 S = load('/Users/sgardy/Documents/Github/Imagery/chanlocs_ssv4att_MRI.mat');   % path
 chanlocs = S.chanlocs;                 % name chanlocs
 
 for subindex = 1:min(numel(folderNames))
     thisFolder = fullfile(datafolder, folderNames{subindex});
-    setfile = dir(fullfile(thisFolder, '*afterICA*.set'));
+    setfile = dir(fullfile(thisFolder, '*afterICA.set'));
 
  for j = 1:numel(setfile)
         fprintf('Running prepro2 %s  run %d  %s\n', folderNames{subindex}, j, setfile(j).name);
