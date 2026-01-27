@@ -2,7 +2,6 @@ function LB3_prepro_epoching_gaborgen_sg(datafolder, filename, csvfile, markerSt
     resampleTo, segTimesMs)
         %% set random number generator (just in case)
         rng(1);
-
          [~, basename, ~] = fileparts([datafolder '/' filename]); 
         
         %% initialize eeglab
@@ -17,7 +16,13 @@ function LB3_prepro_epoching_gaborgen_sg(datafolder, filename, csvfile, markerSt
         disp('Step 2/5 - Resampling data...');
         EEG = pop_resample(EEG, resampleTo);
     
-        %% Step 3 - Replace event 'S121' with 'S 21'
+        %% Create Epochs in trial order
+        EEG_trls = pop_epoch(EEG, 'S  2', segTimesMs ./ 1000, ...
+            'newname', 'segmented', 'epochinfo', 'yes');
+        
+        EEG_trls = pop_saveset(EEG_trls, 'filename',[basename '_01_raw.set'], ...
+                               'filepath',datafolder);
+        %% Step 3 - find event codes/Replace event 'S121' with 'S 21'
         % disp('Step 3/5 - Replacing event codes...');
         % markerallevents = {EEG.event.type};
         % csplus_paired = find(ismember(markerallevents, 'S121'));
@@ -37,12 +42,12 @@ end
     dataOut = cell(numel(condStrings), 3);  % now 3 columns: label, data, time
     
     for i = 1:numel(condStrings)
-        EEG_tmp = pop_epoch(EEG, condStrings{i}, segTimesMs ./ 1000, ...
+        EEG_conds = pop_epoch(EEG, condStrings{i}, segTimesMs ./ 1000, ...
             'newname', 'segmented', 'epochinfo', 'yes');
         
         dataOut{i,1} = condStrings{i}        % condition label
-        dataOut{i,2} = EEG_tmp.data;          % EEG data: chan × time × trials
-        dataOut{i,3} = EEG_tmp.times;         % time vector in ms
+        dataOut{i,2} = EEG_conds.data;          % EEG data: chan × time × trials
+        dataOut{i,3} = EEG_conds.times;         % time vector in ms
     end
     
     %% Step 5 - Save condition–data–time matrix
