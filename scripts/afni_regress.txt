@@ -1,0 +1,30 @@
+ROOT="/Users/sgardy/Documents/SarahData/Imagery/Data/rawMRI"
+
+afni_proc.py \
+  -subj_id par_03 \
+  -dsets $ROOT/par_03/PROC_par_03_e6b/pb04.par_03.r??.scale+tlrc.HEAD \
+  -blocks regress \
+  -regress_motion_file "$ROOT/par_03/PROC_par_03_e6b/dfile_rall.1D" \
+  -mask_apply "$ROOT/par_03/PROC_par_03_e6b/full_mask.par_03+tlrc" \
+  -regress_apply_mask \
+  -regress_stim_times \
+      "$ROOT/timing/par_03/O2.contam.txt" \
+      "$ROOT/timing/par_03/O2.ero.txt" \
+      "$ROOT/timing/par_03/O2.neu.txt" \
+      "$ROOT/timing/par_03/O2.oth.txt" \
+      "$ROOT/timing/par_03/O2.PerNeu.txt" \
+      "$ROOT/timing/par_03/O2.PerPl.txt" \
+      "$ROOT/timing/par_03/O2.PerUn.txt" \
+      "$ROOT/timing/par_03/O2.rew.txt" \
+      "$ROOT/timing/par_03/O2.surv.txt" \
+  -regress_stim_labels contam ero neu oth PerNeu PerPl PerUn rew surv \
+  -regress_basis 'CSPLINzero(0,12,8)' \
+  -regress_censor_motion 0.3 \
+  -regress_censor_outliers 0.1 \
+  -regress_reml_exec \
+  -regress_compute_fitts \
+  -regress_est_blur_epits \
+  -regress_est_blur_errts \
+  -html_review_style pythonic \
+  -out_dir "$ROOT/par_03/results" \
+  -execute

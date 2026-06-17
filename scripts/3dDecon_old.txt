@@ -1,0 +1,34 @@
+#!/bin/bash
+ROOT=/Users/sgardy/Documents/SarahData/Imagery/Data/rawMRI
+
+3dDeconvolve \
+  -input $ROOT/par_03/PROC_par_03_e6b/pb04.par_03.r02.scale+tlrc.HEAD \
+  -mask $ROOT/par_03/PROC_par_03_e6b/full_mask.par_03+tlrc.HEAD \
+  -censor $ROOT/par_03/PROC_par_03_e6b/dfile.r02.1D \
+  -polort A \
+  -num_stimts 3 \
+  -stim_times 1 $ROOT/timing/par_03/O2.contam.LOCAL_002.txt 'CSPLINzero(0,20,10)' \
+  -stim_label 1 contam \
+  -stim_times 2 $ROOT/timing/par_03/O2.ero.LOCAL_002.txt 'CSPLINzero(0,20,10)' \
+  -stim_label 2 ero \
+  -stim_times 3 $ROOT/timing/par_03/O2.neu.LOCAL_002.txt 'CSPLINzero(0,20,10)' \
+  -stim_label 3 neu \
+  -stim_times 4 $ROOT/timing/par_03/O2.oth.LOCAL.txt 'CSPLINzero(0,20,10)' \
+  -stim_label 4 oth \
+  -stim_times 5 $ROOT/timing/par_03/O2.PerNeu.LOCAL_002.txt 'CSPLINzero(0,20,10)' \
+  -stim_label 5 PerNeu \
+  -stim_times 6 $ROOT/timing/par_03/O2.PerPl.LOCAL_002.txt 'CSPLINzero(0,20,10)' \
+  -stim_label 6 PerPl \
+  -stim_times 7 $ROOT/timing/par_03/O2.PerUn.LOCAL_002.txt 'CSPLINzero(0,20,10)' \
+  -stim_label 7 PerUn \
+  -stim_times 8 $ROOT/timing/par_03/O2.rew.LOCAL_002.txt 'CSPLINzero(0,20,10)' \
+  -stim_label 8 rew \
+  -stim_times 9 $ROOT/timing/par_03/O2.surv.LOCAL_002.txt 'CSPLINzero(0,20,10)' \
+  -stim_label 9 surv \
+  -ortvec $ROOT/par_03/PROC_par_03_e6b/dfile.r02.1D "motion_params" \
+  -bucket "$ROOT/par_03/results/stats.par_03" \
+  -gltsym "SYM: contam - neu" -glt_label 1 contam-neu \
+  -x1D "$ROOT/par_03/results/X.mat.1D" \
+  -xjpeg "$ROOT/par_03/results/X.mat.jpg" \
+  -fout \
+  -tout

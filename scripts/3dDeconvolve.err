@@ -1,0 +1,8 @@
+*+ WARNING: Filename conflict: changing '/Volumes/ELEMENTS/imagery/participants/par_21/fmri/paramod_block/stats.par_21' to 'stats.par_21_AA1'
+*+ WARNING: Smallest FDR q [4 pleasant_read#1_Tstat] = 0.267053 ==> few true single voxel detections
+*+ WARNING: Smallest FDR q [9 neutral_read#1_Tstat] = 0.259905 ==> few true single voxel detections
+*+ WARNING: Smallest FDR q [24 neutral_imagine#1_Tstat] = 0.691313 ==> few true single voxel detections
+*+ WARNING: Smallest FDR q [32 Overall_Modulation_GLT#0_Tstat] = 0.101824 ==> few true single voxel detections
+*+ WARNING: Smallest FDR q [33 Overall_Modulation_GLT_Fstat] = 0.101824 ==> few true single voxel detections
+*+ WARNING: Smallest FDR q [38 Mod_Imagine_Emotion_vs_Neutral_GLT#0_Tstat] = 0.296523 ==> few true single voxel detections
+*+ WARNING: Smallest FDR q [39 Mod_Imagine_Emotion_vs_Neutral_GLT_Fstat] = 0.295448 ==> few true single voxel detections

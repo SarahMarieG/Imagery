@@ -1,0 +1,25 @@
+#do tests on contrasts; create mask from significant clusters for script '3dmasking" (not necessary, need to revisit tho)
+3dttest++ -prefix group_emotional_vs_neutral_pars \
+          -mask /Volumes/ELEMENTS/imagery/participants/par_01/fmri/PROC_cspline/mask_group+tlrc \
+          -Clustsim \
+          -toz \
+          -setA \
+          /Volumes/ELEMENTS/imagery/participants/par_01/fmri/PROC_cspline/stats.par_01_REML+tlrc.HEAD'[emotional-neutral#0_Coef]' \
+          /Volumes/ELEMENTS/imagery/participants/par_02/fmri/PROC_cspline/stats.par_02_REML+tlrc.HEAD'[emotional-neutral#0_Coef]' \
+          /Volumes/ELEMENTS/imagery/participants/par_03/fmri/PROC_cspline/stats.par_03_REML+tlrc.HEAD'[emotional-neutral#0_Coef]' \
+          /Volumes/ELEMENTS/imagery/participants/par_04/fmri/PROC_cspline/stats.par_04_REML+tlrc.HEAD'[emotional-neutral#0_Coef]' \
+          /Volumes/ELEMENTS/imagery/participants/par_05/fmri/PROC_cspline/stats.par_05_REML+tlrc.HEAD'[emotional-neutral#0_Coef]' \
+          /Volumes/ELEMENTS/imagery/participants/par_06/fmri/PROC_cspline/stats.par_06_REML+tlrc.HEAD'[emotional-neutral#0_Coef]' \
+          /Volumes/ELEMENTS/imagery/participants/par_07/fmri/PROC_cspline/stats.par_07_REML+tlrc.HEAD'[emotional-neutral#0_Coef]' \
+          /Volumes/ELEMENTS/imagery/participants/par_09/fmri/PROC_cspline/stats.par_09_REML+tlrc.HEAD'[emotional-neutral#0_Coef]' \
+          /Volumes/ELEMENTS/imagery/participants/par_10/fmri/PROC_cspline/stats.par_10_REML+tlrc.HEAD'[emotional-neutral#0_Coef]' \
+          /Volumes/ELEMENTS/imagery/participants/par_12/fmri/PROC_cspline/stats.par_12_REML+tlrc.HEAD'[emotional-neutral#0_Coef]' \
+          /Volumes/ELEMENTS/imagery/participants/par_13/fmri/PROC_cspline/stats.par_13_REML+tlrc.HEAD'[emotional-neutral#0_Coef]' \
+          /Volumes/ELEMENTS/imagery/participants/par_14/fmri/PROC_cspline/stats.par_14_REML+tlrc.HEAD'[emotional-neutral#0_Coef]' \
+          /Volumes/ELEMENTS/imagery/participants/par_15/fmri/PROC_cspline/stats.par_15_REML+tlrc.HEAD'[emotional-neutral#0_Coef]' \
+          /Volumes/ELEMENTS/imagery/participants/par_16/fmri/PROC_cspline/stats.par_16_REML+tlrc.HEAD'[emotional-neutral#0_Coef]' \
+          /Volumes/ELEMENTS/imagery/participants/par_17/fmri/PROC_cspline/stats.par_17_REML+tlrc.HEAD'[emotional-neutral#0_Coef]' \
+          /Volumes/ELEMENTS/imagery/participants/par_18/fmri/PROC_cspline/stats.par_18_REML+tlrc.HEAD'[emotional-neutral#0_Coef]' \
+          /Volumes/ELEMENTS/imagery/participants/par_19/fmri/PROC_cspline/stats.par_19_REML+tlrc.HEAD'[emotional-neutral#0_Coef]' \
+          /Volumes/ELEMENTS/imagery/participants/par_20/fmri/PROC_cspline/stats.par_20_REML+tlrc.HEAD'[emotional-neutral#0_Coef]' \
+          /Volumes/ELEMENTS/imagery/participants/par_21/fmri/PROC_cspline/stats.par_21_REML+tlrc.HEAD'[emotional-neutral#0_Coef]'

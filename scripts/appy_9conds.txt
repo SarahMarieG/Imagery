@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+
+ROOT="/Users/sgardy/Documents/SarahData/Imagery/Data/rawMRI"
+TPL="MNI152_2009_template_SSW.nii.gz"
+BLUR=4.0
+BASIS='CSPLINzero(0,31,15)'
+CONDS=(contam ero neu oth PerNeu PerPl PerUn rew surv)
+
+for subdir in "$ROOT"/par_*; do
+  SUBJ="${subdir##*/}"
+
+  anatSS="$subdir/sswarper/anatSS.${SUBJ}.nii"
+  anatQQ="$subdir/sswarper/anatQQ.${SUBJ}.nii"
+  aff12="$subdir/sswarper/anatQQ.${SUBJ}.aff12.1D"
+  warp="$subdir/sswarper/anatQQ.${SUBJ}_WARP.nii"
+  funcdir="$subdir/func"
+  tdir="$subdir/timing"
+  outdir="$subdir/PROC_cspline"
+  origanat=("$subdir/anat/"KEIL_*.nii)
+
+  dsets=("$funcdir"/*EPI*.nii)
+
+  timing_files=()
+  for c in "${CONDS[@]}"; do
+    timing_files+=("$tdir/"O*${c}.LOCAL.txt)
+  done
+
+  iresp_opts=()
+  i=1
+  for c in "${CONDS[@]}"; do
+    iresp_opts+=( -iresp "$i" "iresp_${c}" )
+    i=$((i+1))
+  done
+
+  afni_proc.py \
+    -subj_id "$SUBJ" \
+    -script  "proc.${SUBJ}.cspline" \
+    -out_dir "$outdir" \
+    -dsets "${dsets[@]}" \
+    -copy_anat "$anatSS" \
+    -anat_has_skull no \
+    -anat_follower anat_w_skull anat "$origanat" \
+    -blocks tshift align tlrc volreg mask blur scale regress \
+    -align_unifize_epi local \
+    -align_opts_aea -cost lpc+ZZ -giant_move -check_flip \
+    -tlrc_base "$TPL" \
+    -tlrc_NL_warp \
+    -tlrc_NL_warped_dsets "$anatQQ" "$aff12" "$warp" \
+    -volreg_align_to MIN_OUTLIER \
+    -volreg_align_e2a \
+    -volreg_tlrc_warp \
+    -blur_size "$BLUR" \
+    -regress_basis "$BASIS" \
+    -regress_stim_times "${timing_files[@]}" \
+    -regress_stim_labels "${CONDS[@]}" \
+    -regress_opts_3dD \
+      -local_times \
+      -fout -tout \
+      -gltsym 'SYM: +PerPl -PerNeu' -glt_label 1 PerPl-PerNeu \
+      -gltsym 'SYM: +PerUn -PerNeu' -glt_label 2 PerUn-PerNeu \
+      -gltsym 'SYM: +PerUn +contam +surv -PerNeu -neu' -glt_label 3 Un-neu \
+      "${iresp_opts[@]}" \
+    -regress_motion_per_run \
+    -regress_censor_motion   0.3 \
+    -regress_censor_outliers 0.05 \
+    -regress_reml_exec \
+    -regress_compute_fitts \
+    -regress_make_ideal_sum   sum_ideal.1D \
+    -regress_est_blur_epits \
+    -regress_est_blur_errts \
+    -regress_make_cbucket yes \
+    -html_review_style pythonic
+
+done

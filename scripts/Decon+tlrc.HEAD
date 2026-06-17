@@ -1,0 +1,212 @@
+
+type = string-attribute
+name = HISTORY_NOTE
+count = 6441
+'[sgardy@PSY-45Q469C: Tue Mar 31 13:30:31 2026] ===================================\n[sgardy@PSY-45Q469C: Tue Mar 31 13:30:31 2026] === History of inputs to 3dcalc ===\n[sgardy@PSY-45Q469C: Tue Mar 31 13:30:31 2026] === Input a:\n[sgardy@PSY-45Q469C: Tue Mar 31 13:30:31 2026] [sgardy@PSY-45Q469C: Tue Mar 31 13:27:00 2026] ===================================\n[sgardy@PSY-45Q469C: Tue Mar 31 13:27:00 2026] === History of inputs to 3dcalc ===\n[sgardy@PSY-45Q469C: Tue Mar 31 13:27:00 2026] === Input a:\n[sgardy@PSY-45Q469C: Tue Mar 31 13:27:00 2026] [sgardy@PSY-45Q469C: Tue Mar 31 13:21:46 2026] {AFNI_25.2.05:macos_13_ARM} 3dNwarpApply -master anatQQ.par_01+tlrc -dxyz 2 -source pb01.par_01.r01.tshift+orig -nwarp 'anatQQ.par_01_WARP.nii mat.r01.warp.aff12.1D' -prefix rm.epi.nomask.r01\n[sgardy@PSY-45Q469C: Tue Mar 31 13:27:00 2026] === Input b:\n[sgardy@PSY-45Q469C: Tue Mar 31 13:27:00 2026] [sgardy@PSY-45Q469C: Tue Mar 31 13:17:01 2026] {AFNI_25.2.05:macos_13_ARM} 3dcalc -a pb01.par_01.r01.tshift+orig -expr 1 -prefix rm.epi.all1\n[sgardy@PSY-45Q469C: Tue Mar 31 13:26:27 2026] {AFNI_25.2.05:macos_13_ARM} 3dNwarpApply -master anatQQ.par_01+tlrc -dxyz 2 -source rm.epi.all1+orig -nwarp 'anatQQ.par_01_WARP.nii mat.r01.warp.aff12.1D' -interp cubic -ainterp NN -quiet -prefix rm.epi.1.r01\n[sgardy@PSY-45Q469C: Tue Mar 31 13:26:36 2026] {AFNI_25.2.05:macos_13_ARM} 3dTstat -min -prefix rm.epi.min.r01 rm.epi.1.r01+tlrc\n[sgardy@PSY-45Q469C: Tue Mar 31 13:26:36 2026] {AFNI_25.2.05:macos_13_ARM} 3dcopy rm.epi.min.r01+tlrc mask_epi_extents\n[sgardy@PSY-45Q469C: Tue Mar 31 13:27:00 2026] ===================================\n[sgardy@PSY-45Q469C: Tue Mar 31 13:27:00 2026] {AFNI_25.2.05:macos_13_ARM} 3dcalc -a rm.epi.nomask.r01+tlrc -b mask_epi_extents+tlrc -expr 'a*b' -prefix pb02.par_01.r01.volreg\n[sgardy@PSY-45Q469C: Tue Mar 31 13:28:37 2026] {AFNI_25.2.05:macos_13_ARM} 3dmerge -1blur_fwhm 4.0 -doall -prefix pb03.par_01.r01.blur pb02.par_01.r01.volreg+tlrc\n[sgardy@PSY-45Q469C: Tue Mar 31 13:30:31 2026] === Input b:\n[sgardy@PSY-45Q469C: Tue Mar 31 13:30:31 2026] [sgardy@PSY-45Q469C: Tue Mar 31 13:27:00 2026] ===================================\n[sgardy@PSY-45Q469C: Tue Mar 31 13:27:00 2026] === History of inputs to 3dcalc ===\n[sgardy@PSY-45Q469C: Tue Mar 31 13:27:00 2026] === Input a:\n[sgardy@PSY-45Q469C: Tue Mar 31 13:27:00 2026] [sgardy@PSY-45Q469C: Tue Mar 31 13:21:46 2026] {AFNI_25.2.05:macos_13_ARM} 3dNwarpApply -master anatQQ.par_01+tlrc -dxyz 2 -source pb01.par_01.r01.tshift+orig -nwarp 'anatQQ.par_01_WARP.nii mat.r01.warp.aff12.1D' -prefix rm.epi.nomask.r01\n[sgardy@PSY-45Q469C: Tue Mar 31 13:27:00 2026] === Input b:\n[sgardy@PSY-45Q469C: Tue Mar 31 13:27:00 2026] [sgardy@PSY-45Q469C: Tue Mar 31 13:17:01 2026] {AFNI_25.2.05:macos_13_ARM} 3dcalc -a pb01.par_01.r01.tshift+orig -expr 1 -prefix rm.epi.all1\n[sgardy@PSY-45Q469C: Tue Mar 31 13:26:27 2026] {AFNI_25.2.05:macos_13_ARM} 3dNwarpApply -master anatQQ.par_01+tlrc -dxyz 2 -source rm.epi.all1+orig -nwarp 'anatQQ.par_01_WARP.nii mat.r01.warp.aff12.1D' -interp cubic -ainterp NN -quiet -prefix rm.epi.1.r01\n[sgardy@PSY-45Q469C: Tue Mar 31 13:26:36 2026] {AFNI_25.2.05:macos_13_ARM} 3dTstat -min -prefix rm.epi.min.r01 rm.epi.1.r01+tlrc\n[sgardy@PSY-45Q469C: Tue Mar 31 13:26:36 2026] {AFNI_25.2.05:macos_13_ARM} 3dcopy rm.epi.min.r01+tlrc mask_epi_extents\n[sgardy@PSY-45Q469C: Tue Mar 31 13:27:00 2026] ===================================\n[sgardy@PSY-45Q469C: Tue Mar 31 13:27:00 2026] {AFNI_25.2.05:macos_13_ARM} 3dcalc -a rm.epi.nomask.r01+tlrc -b mask_epi_extents+tlrc -expr 'a*b' -prefix pb02.par_01.r01.volreg\n[sgardy@PSY-45Q469C: Tue Mar 31 13:28:37 2026] {AFNI_25.2.05:macos_13_ARM} 3dmerge -1blur_fwhm 4.0 -doall -prefix pb03.par_01.r01.blur pb02.par_01.r01.volreg+tlrc\n[sgardy@PSY-45Q469C: Tue Mar 31 13:30:10 2026] {AFNI_25.2.05:macos_13_ARM} 3dTstat -prefix rm.mean_r01 pb03.par_01.r01.blur+tlrc\n[sgardy@PSY-45Q469C: Tue Mar 31 13:30:31 2026] === Input c:\n[sgardy@PSY-45Q469C: Tue Mar 31 13:30:31 2026] [sgardy@PSY-45Q469C: Tue Mar 31 13:17:01 2026] {AFNI_25.2.05:macos_13_ARM} 3dcalc -a pb01.par_01.r01.tshift+orig -expr 1 -prefix rm.epi.all1\n[sgardy@PSY-45Q469C: Tue Mar 31 13:26:27 2026] {AFNI_25.2.05:macos_13_ARM} 3dNwarpApply -master anatQQ.par_01+tlrc -dxyz 2 -source rm.epi.all1+orig -nwarp 'anatQQ.par_01_WARP.nii mat.r01.warp.aff12.1D' -interp cubic -ainterp NN -quiet -prefix rm.epi.1.r01\n[sgardy@PSY-45Q469C: Tue Mar 31 13:26:36 2026] {AFNI_25.2.05:macos_13_ARM} 3dTstat -min -prefix rm.epi.min.r01 rm.epi.1.r01+tlrc\n[sgardy@PSY-45Q469C: Tue Mar 31 13:26:36 2026] {AFNI_25.2.05:macos_13_ARM} 3dcopy rm.epi.min.r01+tlrc mask_epi_extents\n[sgardy@PSY-45Q469C: Tue Mar 31 13:30:31 2026] ===================================\n[sgardy@PSY-45Q469C: Tue Mar 31 13:30:31 2026] {AFNI_25.2.05:macos_13_ARM} 3dcalc -a pb03.par_01.r01.blur+tlrc -b rm.mean_r01+tlrc -c mask_epi_extents+tlrc -expr 'c * min(200, a/b*100)*step(a)*step(b)' -prefix pb04.par_01.r01.scale\n[sgardy@PSY-45Q469C: Tue Jun  2 12:19:53 2026] {AFNI_25.2.05:macos_13_ARM} 3dDeconvolve -input /Volumes/ELEMENTS/imagery/participants/par_01/fmri/PROC_cspline/pb04.par_01.r01.scale+tlrc.HEAD -mask /Volumes/ELEMENTS/imagery/participants/par_01/fmri/PROC_cspline/full_mask.par_01+tlrc.HEAD -censor /Volumes/ELEMENTS/imagery/participants/par_01/fmri/PROC_cspline/censor_par_01_combined_2.1D -ortvec /Volumes/ELEMENTS/imagery/participants/par_01/fmri/PROC_cspline/mot_demean.r01.1D mot_demean_r01 -polort A -num_stimts 6 -stim_times_AM2 1 /Volumes/ELEMENTS/imagery/participants/par_01/fmri/pleasant_read_alpha.txt 'CSPLINzero(0,9,6)' -stim_label 1 pleasant_read -stim_times_AM2 2 /Volumes/ELEMENTS/imagery/participants/par_01/fmri/neutral_read_alpha.txt 'CSPLINzero(0,9,6)' -stim_label 2 neutral_read -stim_times_AM2 3 /Volumes/ELEMENTS/imagery/participants/par_01/fmri/unpleasant_read_alpha.txt 'CSPLINzero(0,9,6)' -stim_label 3 unpleasant_read -stim_times_AM2 4 /Volumes/ELEMENTS/imagery/participants/par_01/fmri/pleasant_imagine_alpha.txt 'CSPLINzero(0,11,7)' -stim_label 4 pleasant_imagine -stim_times_AM2 5 /Volumes/ELEMENTS/imagery/participants/par_01/fmri/neutral_imagine_alpha.txt 'CSPLINzero(0,11,7)' -stim_label 5 neutral_imagine -stim_times_AM2 6 /Volumes/ELEMENTS/imagery/participants/par_01/fmri/unpleasant_imagine_alpha.txt 'CSPLINzero(0,11,7)' -stim_label 6 unpleasant_imagine\n[sgardy@PSY-45Q469C: Tue Jun  2 12:19:53 2026] Output prefix: Decon~
+
+type = string-attribute
+name = TYPESTRING
+count = 15
+'3DIM_HEAD_FUNC~
+
+type = string-attribute
+name = IDCODE_STRING
+count = 27
+'AFN_zfjRM_9Pj-coDAzWufTrtw~
+
+type = string-attribute
+name = IDCODE_DATE
+count = 25
+'Tue Jun  2 12:19:53 2026~
+
+type = integer-attribute
+name = SCENE_DATA
+count = 8
+ 2 11 1 -999 -999
+ -999 -999 -999
+
+type = string-attribute
+name = LABEL_1
+count = 5
+'zyxt~
+
+type = string-attribute
+name = LABEL_2
+count = 5
+'zyxt~
+
+type = string-attribute
+name = DATASET_NAME
+count = 5
+'zyxt~
+
+type = integer-attribute
+name = ORIENT_SPECIFIC
+count = 3
+ 1 2 4
+
+type  = float-attribute
+name  = ORIGIN
+count = 3
+             95            131            -77
+
+type  = float-attribute
+name  = DELTA
+count = 3
+             -2             -2              2
+
+type  = float-attribute
+name  = IJK_TO_DICOM
+count = 12
+             -2              0              0             95              0
+             -2              0            131              0              0
+              2            -77
+
+type  = float-attribute
+name  = IJK_TO_DICOM_REAL
+count = 12
+             -2              0              0             95              0
+             -2              0            131              0              0
+              2            -77
+
+type  = float-attribute
+name  = BRICK_STATS
+count = 110
+              0       24.13077      -11.21412       10.03208      -18.07691
+       22.99869      -6.419107       13.19715      -12.63582       26.32702
+      -6.696117       13.02417      -35.41129       55.12796      -9.731475
+       16.78033      -15.61958       16.17976      -11.97707       7.375354
+      -13.23094       16.71362      -9.021753       16.22702      -11.70115
+       29.44187      -12.61494       15.39864      -21.19619       29.85385
+      -9.251273       14.09666      -11.43131       18.16583      -11.16867
+       5.862854      -22.32634       31.15117      -8.291441       12.93548
+      -14.78904       38.02927      -30.21385       21.51617      -78.97265
+       43.74726      -9.174802        10.1187       -37.4197       26.72655
+      -8.307023       16.41879      -13.29585       14.69832      -5.752366
+       7.678586      -6.807137       12.61777       -6.40339       16.12551
+      -5.757951       7.360832      -23.94976       18.63894      -10.20817
+       7.667172      -14.34514       19.91919      -18.67277        16.1867
+       -7.80204       19.89748      -9.992022       22.50295      -5.884398
+       6.164498      -11.90526       12.73435      -5.948273       7.818814
+      -8.838818       6.306417      -17.97544       18.90651      -8.459397
+       7.033859      -13.11383       20.99337       -21.3613       11.96131
+      -8.526063         17.125       -14.4228        16.5171       -4.55206
+       6.018302      -9.910737       12.79203      -11.70114       10.58757
+      -13.57526       15.91728      -19.29088       14.65426      -12.94192
+       9.556832      -25.09241       38.24088      -15.50842       12.94334
+
+type = integer-attribute
+name = DATASET_RANK
+count = 8
+ 3 55 0 0 0
+ 0 0 0
+
+type = integer-attribute
+name = DATASET_DIMENSIONS
+count = 5
+ 96 114 96 0 0
+
+type = integer-attribute
+name = BRICK_TYPES
+count = 55
+ 3 3 3 3 3
+ 3 3 3 3 3
+ 3 3 3 3 3
+ 3 3 3 3 3
+ 3 3 3 3 3
+ 3 3 3 3 3
+ 3 3 3 3 3
+ 3 3 3 3 3
+ 3 3 3 3 3
+ 3 3 3 3 3
+ 3 3 3 3 3
+
+type  = float-attribute
+name  = BRICK_FLOAT_FACS
+count = 55
+              0              0              0              0              0
+              0              0              0              0              0
+              0              0              0              0              0
+              0              0              0              0              0
+              0              0              0              0              0
+              0              0              0              0              0
+              0              0              0              0              0
+              0              0              0              0              0
+              0              0              0              0              0
+              0              0              0              0              0
+              0              0              0              0              0
+
+type = string-attribute
+name = BRICK_LABS
+count = 1253
+'Full_Fstat~pleasant_read#0_Coef~pleasant_read#1_Coef~pleasant_read#2_Coef~pleasant_read#3_Coef~pleasant_read#4_Coef~pleasant_read#5_Coef~pleasant_read#6_Coef~pleasant_read#7_Coef~neutral_read#0_Coef~neutral_read#1_Coef~neutral_read#2_Coef~neutral_read#3_Coef~neutral_read#4_Coef~neutral_read#5_Coef~neutral_read#6_Coef~neutral_read#7_Coef~unpleasant_read#0_Coef~unpleasant_read#1_Coef~unpleasant_read#2_Coef~unpleasant_read#3_Coef~unpleasant_read#4_Coef~unpleasant_read#5_Coef~unpleasant_read#6_Coef~unpleasant_read#7_Coef~pleasant_imagine#0_Coef~pleasant_imagine#1_Coef~pleasant_imagine#2_Coef~pleasant_imagine#3_Coef~pleasant_imagine#4_Coef~pleasant_imagine#5_Coef~pleasant_imagine#6_Coef~pleasant_imagine#7_Coef~pleasant_imagine#8_Coef~pleasant_imagine#9_Coef~neutral_imagine#0_Coef~neutral_imagine#1_Coef~neutral_imagine#2_Coef~neutral_imagine#3_Coef~neutral_imagine#4_Coef~neutral_imagine#5_Coef~neutral_imagine#6_Coef~neutral_imagine#7_Coef~neutral_imagine#8_Coef~neutral_imagine#9_Coef~unpleasant_imagine#0_Coef~unpleasant_imagine#1_Coef~unpleasant_imagine#2_Coef~unpleasant_imagine#3_Coef~unpleasant_imagine#4_Coef~unpleasant_imagine#5_Coef~unpleasant_imagine#6_Coef~unpleasant_imagine#7_Coef~unpleasant_imagine#8_Coef~unpleasant_imagine#9_Coef~
+
+type  = float-attribute
+name  = BRICK_STATAUX
+count = 5
+              0              4              2             54            472
+
+type = string-attribute
+name = BRICK_STATSYM
+count = 284
+'Ftest(54,472);none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none~
+
+type  = float-attribute
+name  = FDRCURVE_000000
+count = 103
+      0.4282392     0.03711046      0.6561627      0.6562929      0.6567115
+      0.6576677      0.6596855      0.6634268       0.669638      0.6796297
+       0.694113      0.7141747      0.7400323      0.7725488       0.812171
+      0.8590518      0.9127366      0.9727705       1.039127       1.111348
+       1.188869       1.271817       1.358742       1.449262       1.543883
+       1.641957       1.741893        1.84469       1.949259       2.054544
+       2.160278       2.267729       2.374631       2.481452       2.589275
+       2.696697       2.804142       2.910533        3.01643       3.122207
+       3.226418       3.329993        3.43311       3.535254       3.635782
+       3.735669       3.835339        3.93325       4.029984       4.126812
+       4.222317       4.316938       4.411147       4.504515       4.597152
+       4.688416       4.778846       4.868636       4.957479       5.046312
+       5.134059       5.220778       5.306724       5.391949       5.476411
+       5.560002       5.643353       5.725871         5.8073       5.888387
+       5.968227       6.047729       6.126719       6.204506       6.281811
+       6.358783       6.435322       6.510788       6.585925       6.660211
+       6.734023        6.80709       6.879836       6.951608       7.022681
+       7.093293       7.163543       7.232923       7.301866       7.370449
+         7.4387        7.50613       7.572908       7.639383       7.705374
+       7.732913       7.732913       7.732913       7.732913       7.732913
+       7.732913       7.732913       7.732913
+
+type  = float-attribute
+name  = MDFCURVE_000000
+count = 77
+            -15      0.2027021      0.9990001      0.8740337        0.87296
+      0.8715613      0.8703662      0.8689787      0.8678469       0.866482
+       0.864835      0.8632331      0.8615298      0.8600062      0.8580207
+      0.8559619       0.854152      0.8524984      0.8504621      0.8484882
+      0.8462986      0.8440356      0.8418842      0.8394076      0.8371128
+      0.8344231      0.8313782      0.8280064       0.825083      0.8215546
+      0.8178261      0.8142346      0.8103342      0.8061365      0.8021358
+      0.7977505      0.7928097       0.787258      0.7816827      0.7757072
+      0.7695997      0.7631377      0.7566102      0.7488588      0.7404733
+      0.7313866      0.7220597      0.7122851       0.701809       0.690272
+      0.6781181      0.6641233      0.6499049      0.6332482      0.6156309
+      0.5980821      0.5781546      0.5557536       0.532898      0.5078559
+      0.4800364      0.4501607      0.4180639      0.3815735      0.3428908
+      0.2994412      0.2526514      0.2006934      0.1483613     0.09530203
+     0.04800385     0.01135184   4.533191e-09   4.533192e-09   4.533192e-09
+   4.533192e-09              0
+
+type = string-attribute
+name = TEMPLATE_SPACE
+count = 15
+'MNI_2009c_asym~
+
+type = integer-attribute
+name = INT_CMAP
+count = 1
+ 0
+
+type = string-attribute
+name = BYTEORDER_STRING
+count = 10
+'LSB_FIRST~

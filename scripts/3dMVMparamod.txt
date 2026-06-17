@@ -1,0 +1,42 @@
+#creates mvm table and runs mvm for 3dPM (parametric modulation)
+
+#!/usr/bin/env bash
+ROOT="/Volumes/ELEMENTS/imagery"
+OUTDIR="$ROOT/fmri/group_analysis/MVM_parametric"
+TABLEFILE="$OUTDIR/mvm_parametric_table.txt"
+mkdir -p "$OUTDIR"
+
+SUBJS=($(ls -d "$ROOT"/participants/par_* 2>/dev/null | xargs -n1 basename))
+
+# Build table with two within-subject factors: Emotion and Knot
+echo "Subj Emotion Knot InputFile" > "$TABLEFILE"
+
+for s in "${SUBJS[@]}"; do
+  # Adjust this file path string if your real file ends in _REML+tlrc instead of _AA1+tlrc
+  STATS_FILE="$ROOT/participants/$s/fmri/paramod_csplin_full/stats.${s}+tlrc"
+
+  if [[ ! -f "${STATS_FILE}.HEAD" ]]; then
+    echo "WARNING: missing $s file"
+    continue
+  fi
+
+  # Knots 8 through 15 contain your parametric modulation tracking weights
+  for k in {8..15}; do
+    # Calculate a relative time-point index (0 to 7) for the MVM table factor column
+    mvm_knot_idx=$((k - 8))
+    
+    echo "$s pleasant   K${mvm_knot_idx} \"${STATS_FILE}[pleasant#${k}_Coef]\""   >> "$TABLEFILE"
+    echo "$s neutral    K${mvm_knot_idx} \"${STATS_FILE}[neutral#${k}_Coef]\""    >> "$TABLEFILE"
+    echo "$s unpleasant K${mvm_knot_idx} \"${STATS_FILE}[unpleasant#${k}_Coef]\"" >> "$TABLEFILE"
+  done
+done
+
+3dMVM \
+  -prefix "$OUTDIR/MVM_parametric_full_curve" \
+  -jobs 8 \
+  -mask "$ROOT/participants/par_01/fmri/PROC_cspline/full_mask.par_01+tlrc.HEAD" \
+  -bsVars 1 \
+  -wsVars "Emotion*Knot" \
+  -num_glt 1 \
+    -gltLabel 1 Emotion_vs_Neutral -gltCode 1 "Emotion : 0.5*pleasant +0.5*unpleasant -1*neutral" \
+  -dataTable @"$TABLEFILE"

@@ -1,0 +1,40 @@
+#Groups 8 (not "other") conditions imagery study into 3 conditions
+
+#!/bin/bash
+
+order=O2
+timefiles=/Volumes/ELEMENTS/imagery/fmri/time_cols/par_*
+
+merge_sort_to_row() {
+  outfile="$1"
+  shift
+
+  # Ensure all input files end with a newline
+  for f in "$@"; do
+    [ -s "$f" ] && [ "$(tail -c1 "$f")" != $'\n' ] && echo >> "$f"
+  done
+
+  # Concatenate, remove empty lines, sort numerically, and paste into a single row (for single #run fmri files)
+  cat "$@" \
+    | sed '/^$/d' \
+    | sort -n \
+    | paste -sd' ' - \
+    > "$outfile"
+}
+
+
+merge_sort_to_row "${timefiles}/${order}.pleasant.LOCAL.txt" \
+  "${timefiles}/${order}.ero.txt" \
+  "${timefiles}/${order}.rew.txt" \
+  "${timefiles}/${order}.PerPl.txt"
+
+merge_sort_to_row "${timefiles}/${order}.neutral.LOCAL.txt" \
+  "${timefiles}/${order}.neu.txt" \
+  "${timefiles}/${order}.PerNeu.txt"
+
+merge_sort_to_row "${timefiles}/${order}.unpleasant.LOCAL.txt" \
+  "${timefiles}/${order}.contam.txt" \
+  "${timefiles}/${order}.surv.txt" \
+  "${timefiles}/${order}.PerUn.txt"
+
+echo "All files merged, sorted, and placed in a single row safely!"

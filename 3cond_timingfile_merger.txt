@@ -1,0 +1,32 @@
+#!/bin/bash
+
+order=O2
+timefiles=/Users/sgardy/Documents/SarahData/Imagery/Data/time_cols/par_21
+
+merge_sort_timing() {
+  outfile="$1"
+  shift
+
+  for f in "$@"; do
+    cat "$f"
+    printf '\n'
+  done \
+  | sed '/^$/d' \
+  | sort -n \
+  > "$outfile"
+}
+
+
+merge_sort_timing "${timefiles}/${order}.pleasant.txt" \
+  "${timefiles}/${order}.ero.txt" \
+  "${timefiles}/${order}.rew.txt" \
+  "${timefiles}/${order}.PerPl.txt"
+
+merge_sort_timing "${timefiles}/${order}.neutral.txt" \
+  "${timefiles}/${order}.neu.txt" \
+  "${timefiles}/${order}.PerNeu.txt"
+
+merge_sort_timing "${timefiles}/${order}.unpleasant.txt" \
+  "${timefiles}/${order}.contam.txt" \
+  "${timefiles}/${order}.surv.txt" \
+  "${timefiles}/${order}.PerUn.txt"

@@ -1,0 +1,69 @@
+#Use with Csplinezero output;
+#WARNING: because this function uses R, best to avoid naming with '#'; use number index for each input
+
+#!/usr/bin/env bash
+
+ROOT="/Volumes/ELEMENTS/imagery/fmri"
+# Subjects list (excluding very noisy pars: 08 and 11)
+SUBS=(par_01 par_02 par_03 par_04 par_05 par_06 par_07 par_09 par_10 \
+      par_12 par_13 par_14 par_15 par_16 par_17 par_18 par_19 par_20)
+
+# Path to group mask (Generated via 3dmask_tool or a template)
+MASK_FILE="${ROOT}/par_01/PROC_cspline/mask_group+tlrc"
+
+# --- 1. UNPLEASANT vs NEUTRAL (Coef=85, Tstat=86) ---
+args_unp=()
+for sub in "${SUBS[@]}"; do
+    stat_file="${ROOT}/${sub}/PROC_cspline/stats.${sub}_REML+tlrc"
+    args_unp+=( "$sub" "${stat_file}[85]" "${stat_file}[86]" )
+done
+
+3dMEMA -prefix Group_Unpleasant_MEMA \
+       -mask "$MASK_FILE" \
+       -jobs 4 \
+       -model_outliers \
+       -residual_Z \
+       -set Unpleasant_Neutral "${args_unp[@]}"
+
+# --- 2. PLEASANT vs NEUTRAL (Coef=82, Tstat=83) ---
+args_ple=()
+for sub in "${SUBS[@]}"; do
+    stat_file="${ROOT}/${sub}/PROC_cspline/stats.${sub}_REML+tlrc"
+    args_ple+=( "$sub" "${stat_file}[82]" "${stat_file}[83]" )
+done
+
+3dMEMA -prefix Group_Pleasant_MEMA \
+       -mask "$MASK_FILE" \
+       -jobs 4 \
+       -model_outliers \
+       -residual_Z \
+       -set Pleasant_Neutral "${args_ple[@]}"
+
+# --- 3. PLEASANT vs UNPLEASANT (Coef=88, Tstat=89) ---
+args_comp=()
+for sub in "${SUBS[@]}"; do
+    stat_file="${ROOT}/${sub}/PROC_cspline/stats.${sub}_REML+tlrc"
+    args_comp+=( "$sub" "${stat_file}[88]" "${stat_file}[89]" )
+done
+
+3dMEMA -prefix Group_Pleasant_vs_Unpleasant_MEMA \
+       -mask "$MASK_FILE" \
+       -jobs 4 \
+       -model_outliers \
+       -residual_Z \
+       -set Pleasant_Unpleasant "${args_comp[@]}"
+
+
+# --- 4. EMOTIONAL vs NEUTRAL (Coef=, Tstat=) ---
+args_comp=()
+for sub in "${SUBS[@]}"; do
+    stat_file="${ROOT}/${sub}/PROC_cspline/stats.${sub}_REML+tlrc"
+    args_comp+=( "$sub" "${stat_file}[91]" "${stat_file}[92]" )
+done
+
+3dMEMA -prefix Group_Emotional_vs_Neutral_MEMA \
+       -mask "$MASK_FILE" \
+       -jobs 4 \
+       -model_outliers \
+       -residual_Z \
+       -set Emotional_Neutral "${args_comp[@]}"

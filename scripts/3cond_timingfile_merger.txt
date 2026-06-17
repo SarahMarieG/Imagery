@@ -1,0 +1,31 @@
+#!/bin/bash
+
+order=O1
+timefiles=/Volumes/ELEMENTS/imagery/fmri/time_cols/par_01
+
+
+merge_sort_timing() {
+  outfile="$1"
+  shift
+
+  cat "$@" \
+    | tr -s '[:space:]' '\n' \
+    | sed '/^$/d' \
+    | sort -n \
+    | paste -sd' ' - \
+    > "$outfile"
+}
+
+merge_sort_timing "${timefiles}/${order}.pleasant.LOCAL.txt" \
+  "${timefiles}/${order}.ero.txt" \
+  "${timefiles}/${order}.rew.txt" \
+  "${timefiles}/${order}.PerPl.txt"
+
+merge_sort_timing "${timefiles}/${order}.neutral.LOCAL.txt" \
+  "${timefiles}/${order}.neu.txt" \
+  "${timefiles}/${order}.PerNeu.txt"
+
+merge_sort_timing "${timefiles}/${order}.unpleasant.LOCAL.txt" \
+  "${timefiles}/${order}.contam.txt" \
+  "${timefiles}/${order}.surv.txt" \
+  "${timefiles}/${order}.PerUn.txt"

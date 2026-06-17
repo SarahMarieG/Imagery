@@ -1,0 +1,58 @@
+#!/bin/bash
+set -euo pipefail
+
+read -rp "Enter root directory containing participant folders: " ROOT
+read -rp "Enter template file (e.g., MNI152_2009_template_SSW.nii.gz): " TPL
+
+# sanity check
+if [ ! -d "$ROOT" ]; then
+  echo "Root dir not found: $ROOT" >&2
+  exit 1
+fi
+
+for par in "$ROOT"/par_*; do
+  [ -d "$par" ] || continue
+  subj=$(basename "$par")
+  echo "=== $subj ==="
+
+  anatdir="$par/anat"
+  outdir="$par/sswarper"
+  mkdir -p "$outdir"
+
+  # loop over every .nii in anat (skip if none)
+  shopt -s nullglob
+  nii_list=("$anatdir"/*.nii)
+  shopt -u nullglob
+  if [ ${#nii_list[@]} -eq 0 ]; then
+    echo "!! No .nii files in $anatdir — skipping"
+    echo
+    continue
+  fi
+
+  for t1cand in "${nii_list[@]}"; do
+    # ensure it’s 3D (not a 4D EPI)
+    nt=$(3dinfo -nt "$t1cand" 2>/dev/null || echo 0)
+    if [ "$nt" != "1" ]; then
+      echo "!! Skipping (not 3D): $t1cand"
+      continue
+    fi
+
+    base=$(basename "${t1cand%.nii}")
+    echo "Using T1: $t1cand"
+
+    # run FROM inside outdir so all outputs land there
+    (
+      cd "$outdir" || exit 1
+      echo "CWD for $subj is: $(pwd)"
+      sswarper2 \
+        -input "$t1cand" \
+        -base  "$TPL" \
+        -subid "$subj" \
+	-odir  "$outdir" \
+    )
+  done
+
+  echo
+done
+
+echo "All done."

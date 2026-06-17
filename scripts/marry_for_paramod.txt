@@ -1,0 +1,31 @@
+#Use this to merge timing with alpha for parametric modulation
+
+#!/bin/bash
+
+eeg_dir="/Volumes/ELEMENTS/imagery/eeg"
+timing_dir="/Volumes/ELEMENTS/imagery/fmri/time_cols"
+
+# Fill in which participants are O1 vs O2
+declare -A order_map
+for sub in 01 02 03 04 05 06 07 08 09 10; do order_map[$sub]="O1"; done
+for sub in 11 12 13 14 15 16 17 18 19 20 21; do order_map[$sub]="O2"; done
+
+conditions=("pleasant" "neutral" "unpleasant")
+
+for sub in $(seq -w 01 21); do
+
+    order=${order_map[$sub]}
+    eeg_folder="${eeg_dir}/par_${sub}"
+    tim_folder="${timing_dir}/par_${sub}"
+
+    for i in 0 1 2; do
+        cond=${conditions[$i]}
+
+        timing_tool.py \
+            -timing   ${tim_folder}/${order}.${cond}.LOCAL.txt \
+            -marry_AM ${eeg_folder}/alpha_trls_4parammod_${cond}_centered.txt \
+            -write_timing ${eeg_folder}/${cond}_AM.txt
+
+        echo "Done: par_${sub} ${cond}"
+    done
+done

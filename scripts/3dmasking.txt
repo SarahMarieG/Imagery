@@ -1,0 +1,11 @@
+#!/bin/bash
+Parfiles = /Volumes/ELEMENTS/imagery/fmri
+for par in 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20
+do
+   # AFNI's iresp files are already the 'clean' curve
+   3dmaskave -mask Clust_mask_upl_neu+tlrc -quiet iresp_unpleasant.${sub}+tlrc > Parfiles${sub}_unpleasant.1D
+   3dmaskave -mask Clust_mask_pl_neu+tlrc -quiet iresp_pleasant.${sub}+tlrc > Parfiles${sub}_pleasant.1D
+done
+
+#check how many voxels are shared by both masks
+3dcalc -a Clust_mask_upl_neu+tlrc -b Clust_mask_pl_neu+tlrc -expr 'and(a,b)' -prefix Overlap_Mask

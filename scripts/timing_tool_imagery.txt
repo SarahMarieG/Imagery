@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+#HAVE TO CHANGE 984 TO 1017 FOR PARS 9-11, 13, 15-21
+#not for 1-run pars: Par1, Par02, Par04, Par05
+
+#ROOT="/Users/sgardy/Documents/SarahData/Imagery/Data/rawMRI"
+#CONDS=(contam ero neu oth PerNeu PerPl PerUn rew surv)
+
+ROOT="/Users/sgardy/Documents/SarahData/Imagery/Data/time_cols"
+CONDS=(pleasant neutral unpleasant)
+
+cd "$ROOT" 
+
+for subdir in "$ROOT"/par_*; do
+  SUBJ="${subdir##*/}"
+  echo "Processing subject: $SUBJ"
+  timedir="$subdir"
+
+if [[ -d "$timedir" ]]; then
+    for c in "${CONDS[@]}"; do
+    # Enable nullglob so a no-match doesn't yield a literal pattern
+    shopt -s nullglob
+    files=( "$timedir"/O*"$c".txt )
+    shopt -u nullglob
+    
+   for timing in "${files[@]}"; do
+      [ -f "$timing" ] || continue
+      base="${timing%.txt}"
+      output="${base}.LOCAL.txt"
+ 
+timing_tool.py \
+  -timing "$timing" \
+  -global_to_local run_len \
+  -run_len 1017 1017 \
+  -write_timing "$output"
+
+done
+done
+else
+    echo "  (no timing dir) skipping"
+  fi
+
+  echo
+done
+
+#multiple 3dinfo -nt by tr (3) in this case; copy and paste into terminal; NOT USING NOW
+#1d_tool.py -infile O2.pleasant.LOCAL.txt -select_rows 0 -write O2.pleasant.LOCAL_001.txt
+#1d_tool.py -infile O2.pleasant.LOCAL.txt -select_rows 1 -write O2.pleasant.LOCAL_002.txt

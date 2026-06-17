@@ -1,0 +1,34 @@
+#creates mvm table and runs mvm for 3 conds
+
+#!/usr/bin/env bash
+ROOT="/Volumes/ELEMENTS/imagery"
+OUTDIR="$ROOT/fmri/group_analysis/MVM"
+TABLEFILE="$OUTDIR/mvm_peak_datatable.txt"
+mkdir -p "$OUTDIR"
+
+SUBJS=($(ls -d "$ROOT"/participants/par_* 2>/dev/null | xargs -n1 basename))
+
+# Build table
+echo "Subj Cond InputFile" > "$TABLEFILE"
+for s in "${SUBJS[@]}"; do
+  for cond in pleasant neutral unpleasant; do
+    f="$ROOT/$s/PROC_cspline/iresp_${cond}_peak+tlrc"
+    if [[ ! -f "${f}.HEAD" ]]; then
+      echo "WARNING: missing $s $cond peak file"
+      continue
+    fi
+    echo "$s $cond $f"
+  done
+done >> "$TABLEFILE"
+
+echo "Table rows: $(wc -l < "$TABLEFILE") (expect 55 = 18 subjects x 3 + header)"
+
+3dMVM \
+  -prefix "$OUTDIR/MVM_peak" \
+  -jobs 8 \
+  -wsVars "Cond" \
+  -num_glt 3 \
+  -gltLabel 1 pleasant-neutral    -gltCode 1 "Cond : 1*pleasant -1*neutral" \
+  -gltLabel 2 unpleasant-neutral  -gltCode 2 "Cond : 1*unpleasant -1*neutral" \
+  -gltLabel 3 emotional-neutral   -gltCode 3 "Cond : 0.5*pleasant +0.5*unpleasant -1*neutral" \
+  -dataTable @"$TABLEFILE"

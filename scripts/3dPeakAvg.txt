@@ -1,0 +1,21 @@
+# Before running 3dMVM, run this to give averaged Tstat values over peak response
+
+#!/usr/bin/env bash
+ROOT="/Volumes/ELEMENTS/imagery/fmri"
+
+for subdir in "$ROOT"/par_*; do
+  SUBJ="${subdir##*/}"
+  echo "=== $SUBJ ==="
+  for cond in pleasant neutral unpleasant; do
+    iresp="$subdir/PROC_cspline/iresp_${cond}+tlrc"
+    if [[ ! -f "${iresp}.HEAD" ]]; then
+      echo "  MISSING iresp: $cond"
+      continue
+    fi
+    3dTstat \
+      -mean \
+      -prefix "$subdir/PROC_cspline/iresp_${cond}_peak" \
+      "${iresp}[2..3]"
+    echo "  Done: $cond"
+  done
+done
