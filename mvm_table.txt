@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+PARTDIR="/Volumes/ELEMENTS/imagery/participants"
+GROUPDIR="/Volumes/ELEMENTS/imagery/fmri/group_results"
+mkdir -p "$GROUPDIR"
+
+TABLE="$GROUPDIR/MVM_HRFshape_datatable.txt"
+echo -e "Subj\tValence\tTime\tInputFile" > "$TABLE"
+
+conditions=( "pleasant" "neutral" "unpleasant" )
+
+for subdir in "$PARTDIR"/par_*; do
+  SUBJ="${subdir##*/}"
+  statsfile="$subdir/fmri/PROC_cspline_new/stats.${SUBJ}_REML+tlrc"
+  if [[ ! -f "${statsfile}.HEAD" ]]; then
+    echo "** Missing REML for $SUBJ, skipping"
+    continue
+  fi
+
+  for cond in "${conditions[@]}"; do
+    for k in 0 1 2 3 4 5; do
+      echo -e "${SUBJ}\t${cond}\tt${k}\t${statsfile}[${cond}#${k}_Coef]" >> "$TABLE"
+    done
+  done
+done
+
+echo "Data table written to $TABLE"
+wc -l "$TABLE"

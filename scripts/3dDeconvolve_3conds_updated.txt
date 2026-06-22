@@ -1,34 +1,40 @@
-## Used this to create emotional-neutral constrast that was not included in afniprocpy
+## Used this to create emotional-neutral contrast that was not included in afniprocpy
 
 #!/usr/bin/env bash
-ROOT="/Volumes/ELEMENTS/imagery/fmri"
-TIMEDIR="$ROOT/time_cols"
+ROOT="/Volumes/ELEMENTS/imagery"
+PARDIR="$ROOT/participants"
 
-for subdir in "$ROOT"/par_*; do
+
+for subdir in "$PARDIR"/par_*; do
   SUBJ="${subdir##*/}"
-  outdir="$subdir/PROC_cspline"
+  fmridir="$subdir/fmri"
+  
+  mkdir -p "$fmridir/PROC_cspline_new"
 
-  [[ -d "$outdir" ]] || { echo "No PROC dir for $SUBJ, skipping"; continue; }
-  cd "$outdir" || continue
+  indir="$fmridir/PROC_cspline"
+  outdir="$fmridir/PROC_cspline_new"
+
+  [[ -d "$indir" ]] || { echo "No PROC dir for $SUBJ, skipping"; continue; }
+  cd "$indir" || continue
 
   echo "=== Processing $SUBJ ==="
 
   # Detect O1 vs O2 prefix for this subject
-  tdir="$TIMEDIR/$SUBJ"
   prefix=""
   for p in O1 O2; do
-    if [[ -f "$tdir/${p}.pleasant.LOCAL.txt" ]]; then
+    if [[ -f "$fmridir/${p}.pleasant.LOCAL.txt" ]]; then
       prefix="$p"
       break
     fi
   done
 
   if [[ -z "$prefix" ]]; then
-    echo "** No timing files found for $SUBJ in $tdir, skipping"
+    echo "** No timing files found for $SUBJ in $indir, skipping"
     continue
   fi
 
   echo "   Using timing prefix: $prefix"
+
 
   # Dynamically build -ortvec args based on which mot_demean files exist
   ortvec_args=()
@@ -44,33 +50,34 @@ for subdir in "$ROOT"/par_*; do
     continue
   fi
 
+
   3dDeconvolve \
     -input pb04.${SUBJ}.r*.scale+tlrc.HEAD \
-    -censor censor_${SUBJ}_combined_2.1D \
+    -mask "$PARDIR/par_01/fmri/PROC_cspline/mask_group+tlrc" \
+    -censor "$indir/censor_${SUBJ}_combined_2.1D" \
     "${ortvec_args[@]}" \
-    -polort 7 \
+    -polort A \
     -num_stimts 3 \
-    -stim_times 1 "$tdir/${prefix}.pleasant.LOCAL.txt"   'CSPLINzero(0,31,15)' \
+    -stim_times 1 "$fmridir/${prefix}.pleasant.LOCAL.txt"   'CSPLINzero(0,21,8)' \
     -stim_label 1 pleasant \
-    -stim_times 2 "$tdir/${prefix}.neutral.LOCAL.txt"    'CSPLINzero(0,31,15)' \
+    -stim_times 2 "$fmridir/${prefix}.neutral.LOCAL.txt"    'CSPLINzero(0,21,8)' \
     -stim_label 2 neutral \
-    -stim_times 3 "$tdir/${prefix}.unpleasant.LOCAL.txt" 'CSPLINzero(0,31,15)' \
+    -stim_times 3 "$fmridir/${prefix}.unpleasant.LOCAL.txt" 'CSPLINzero(0,21,8)' \
     -stim_label 3 unpleasant \
-    -iresp 1 iresp_pleasant.${SUBJ} \
-    -iresp 2 iresp_neutral.${SUBJ} \
-    -iresp 3 iresp_unpleasant.${SUBJ} \
+    -iresp 1 "$outdir/iresp_pleasant.${SUBJ}" \
+    -iresp 2 "$outdir/iresp_neutral.${SUBJ}" \
+    -iresp 3 "$outdir/iresp_unpleasant.${SUBJ}" \
     -fout -tout \
     -gltsym 'SYM: +pleasant -neutral'               -glt_label 1 pleasant-neutral \
     -gltsym 'SYM: +unpleasant -neutral'             -glt_label 2 unpleasant-neutral \
     -gltsym 'SYM: +pleasant -unpleasant'            -glt_label 3 pleasant-unpleasant \
     -gltsym 'SYM: +pleasant +unpleasant -2*neutral' -glt_label 4 emotional-neutral \
-    -x1D X.xmat.1D \
-    -xjpeg X.jpg \
-    -x1D_uncensored X.nocensor.xmat.1D \
-    -errts errts.${SUBJ} \
-    -cbucket all_betas.${SUBJ} \
-    -bucket stats.${SUBJ} \
-    -x1D_stop
+      -x1D "$outdir/X.xmat.1D" \
+    -xjpeg "$outdir/X.jpg" \
+    -x1D_uncensored "$outdir/X.nocensor.xmat.1D" \
+    -errts "$outdir/errts.${SUBJ}" \
+    -cbucket "$outdir/all_betas.${SUBJ}" \
+    -bucket "$outdir/stats.${SUBJ}"
 
   if [[ $? -ne 0 ]]; then
     echo "** 3dDeconvolve failed for $SUBJ, skipping"

@@ -1,0 +1,29 @@
+#!/usr/bin/env bash 
+
+PARTDIR="/Volumes/ELEMENTS/imagery/participants" 
+GROUPDIR="/Volumes/ELEMENTS/imagery/fmri/group_results/3dMEMAcsplin" 
+mkdir -p "$GROUPDIR" 
+
+contrasts=( "pleasant-neutral" "unpleasant-neutral" "pleasant-unpleasant" "emotional-neutral" )
+
+for contrast_name in "${contrasts[@]}"; do
+  echo "=== Building inputs for: $contrast_name ==="
+  mema_args=()
+
+  for subdir in "$PARTDIR"/par_*; do
+    SUBJ="${subdir##*/}"
+    statsfile="$subdir/fmri/PROC_cspline_new/stats.${SUBJ}_REML+tlrc"
+    if [[ ! -f "${statsfile}.HEAD" ]]; then
+      echo "** Missing REML for $SUBJ, skipping"
+      continue
+    fi
+    mema_args+=( "$SUBJ" "${statsfile}[${contrast_name}#0_Coef]" "${statsfile}[${contrast_name}#0_Tstat]" )
+  done
+
+  echo "   Subjects included: $(( ${#mema_args[@]} / 3 ))"
+  echo "   Output prefix: $GROUPDIR/MEMA_csp_${contrast_name}"
+
+  3dMEMA -prefix "$GROUPDIR/MEMA_csp_${contrast_name}" -jobs 4 -mask "$PARTDIR/par_01/fmri/PROC_cspline/mask_group+tlrc" -HKtest -set "$contrast_name" "${mema_args[@]}"
+
+  echo "=== Done: $contrast_name ==="
+done

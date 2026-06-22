@@ -1,8 +1,10 @@
-*+ WARNING: Filename conflict: changing '/Volumes/ELEMENTS/imagery/participants/par_21/fmri/paramod_block/stats.par_21' to 'stats.par_21_AA1'
-*+ WARNING: Smallest FDR q [4 pleasant_read#1_Tstat] = 0.267053 ==> few true single voxel detections
-*+ WARNING: Smallest FDR q [9 neutral_read#1_Tstat] = 0.259905 ==> few true single voxel detections
-*+ WARNING: Smallest FDR q [24 neutral_imagine#1_Tstat] = 0.691313 ==> few true single voxel detections
-*+ WARNING: Smallest FDR q [32 Overall_Modulation_GLT#0_Tstat] = 0.101824 ==> few true single voxel detections
-*+ WARNING: Smallest FDR q [33 Overall_Modulation_GLT_Fstat] = 0.101824 ==> few true single voxel detections
-*+ WARNING: Smallest FDR q [38 Mod_Imagine_Emotion_vs_Neutral_GLT#0_Tstat] = 0.296523 ==> few true single voxel detections
-*+ WARNING: Smallest FDR q [39 Mod_Imagine_Emotion_vs_Neutral_GLT_Fstat] = 0.295448 ==> few true single voxel detections
+*+ WARNING: Smallest FDR q [4 pleasant_read#1_Tstat] = 0.266914 ==> few true single voxel detections
+*+ WARNING: Smallest FDR q [24 neutral_imagine#1_Tstat] = 0.71122 ==> few true single voxel detections
+*+ WARNING: Smallest FDR q [35 Mod_Read_vs_Imagine_GLT#0_Tstat] = 0.102875 ==> few true single voxel detections
+*+ WARNING: Smallest FDR q [36 Mod_Read_vs_Imagine_GLT_Fstat] = 0.102876 ==> few true single voxel detections
+*+ WARNING: Smallest FDR q [38 Mod_Emotional_vs_Neutral_GLT#0_Tstat] = 0.251 ==> few true single voxel detections
+*+ WARNING: Smallest FDR q [39 Mod_Emotional_vs_Neutral_GLT_Fstat] = 0.250097 ==> few true single voxel detections
+*+ WARNING: Smallest FDR q [41 Mod_Task_x_Emotion_Interaction_GLT#0_Tstat] = 0.487443 ==> few true single voxel detections
+*+ WARNING: Smallest FDR q [42 Mod_Task_x_Emotion_Interaction_GLT_Fstat] = 0.485659 ==> few true single voxel detections
+*+ WARNING: Smallest FDR q [50 Mean_Read_Emotion_vs_Neutral_GLT#0_Tstat] = 0.137325 ==> few true single voxel detections
+*+ WARNING: Smallest FDR q [51 Mean_Read_Emotion_vs_Neutral_GLT_Fstat] = 0.137329 ==> few true single voxel detections

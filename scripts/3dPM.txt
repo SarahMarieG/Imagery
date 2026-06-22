@@ -2,52 +2,98 @@
 #BLOCK(9,1) uses split imagination and reading timing files
 
 #!/bin/bash
-ROOT=/Volumes/ELEMENTS/imagery/participants
+ROOT="/Volumes/ELEMENTS/imagery"
+PARDIR="$ROOT/participants"
 
-for subdir in "$ROOT"/par_*; do
+
+for subdir in "$PARDIR"/par_*; do
   SUBJ="${subdir##*/}"
-  TARGET="$subdir/fmri"
+  fmridir="$subdir/fmri"
+  
+  inputdir="$fmridir/PROC_cspline"
+  outdir="$fmridir/paramod_block"
 
-  mkdir -p "$TARGET/paramod_block"
+  mkdir -p "$outdir"
+  
 
-# Build motion regressors dynamically
+  [[ -d "$inputdir" ]] || { echo "No PROC_cspline dir for $SUBJ, skipping"; continue; }
+
+  echo "=== Processing $SUBJ ==="
+
+# Dynamically build -ortvec args based on which mot_demean files exist
   ortvec_args=()
   for r in 01 02; do
-    f="$TARGET/PROC_cspline/mot_demean.r${r}.1D"
+    f="$inputdir/mot_demean.r${r}.1D"
     if [[ -f "$f" ]]; then
       ortvec_args+=( -ortvec "$f" "mot_demean_r${r}" )
     fi
   done
 
+  if [[ ${#ortvec_args[@]} -eq 0 ]]; then
+    echo "** No mot_demean files found for $SUBJ, skipping"
+    continue
+  fi
+
+
+
 3dDeconvolve \
-  -input "$TARGET"/PROC_cspline/pb04.${SUBJ}.r0*.scale+tlrc.HEAD \
-  -mask "$TARGET"/PROC_cspline/full_mask.${SUBJ}+tlrc.HEAD \
-  -censor "$TARGET"/PROC_cspline/censor_${SUBJ}_combined_2.1D \
+  -input "$inputdir/pb04.${SUBJ}.r0*.scale+tlrc.HEAD" \
+  -mask "$PARDIR/par_01/fmri/PROC_cspline/mask_group+tlrc.HEAD" \
+  -censor "$inputdir/censor_${SUBJ}_combined_2.1D" \
   "${ortvec_args[@]}" \
--polort A \
+  -polort A \
   -num_stimts 6 \
-  -stim_times_AM2 1 "$TARGET"/pleasant_read_alpha.txt 'BLOCK(9,1)' \
+  -stim_times_AM2 1 "$fmridir/pleasant_read_alpha.txt" 'BLOCK(9,1)' \
   -stim_label 1 pleasant_read \
-  -stim_times_AM2 2 "$TARGET"/neutral_read_alpha.txt 'BLOCK(9,1)' \
+  -stim_times_AM2 2 "$fmridir/neutral_read_alpha.txt" 'BLOCK(9,1)' \
   -stim_label 2 neutral_read \
-  -stim_times_AM2 3 "$TARGET"/unpleasant_read_alpha.txt 'BLOCK(9,1)' \
+  -stim_times_AM2 3 "$fmridir/unpleasant_read_alpha.txt" 'BLOCK(9,1)' \
   -stim_label 3 unpleasant_read \
-  -stim_times_AM2 4 "$TARGET"/pleasant_imagine_alpha.txt 'BLOCK(11,1)' \
+  -stim_times_AM2 4 "$fmridir/pleasant_imagine_alpha.txt" 'BLOCK(11,1)' \
   -stim_label 4 pleasant_imagine \
-  -stim_times_AM2 5 "$TARGET"/neutral_imagine_alpha.txt 'BLOCK(11,1)' \
+  -stim_times_AM2 5 "$fmridir/neutral_imagine_alpha.txt" 'BLOCK(11,1)' \
   -stim_label 5 neutral_imagine \
-  -stim_times_AM2 6 "$TARGET"/unpleasant_imagine_alpha.txt 'BLOCK(11,1)' \
+  -stim_times_AM2 6 "$fmridir/unpleasant_imagine_alpha.txt" 'BLOCK(11,1)' \
   -stim_label 6 unpleasant_imagine \
-  -num_glt 3 \
+  -num_glt 9 \
   -gltsym 'SYM: +pleasant_read[1] +neutral_read[1] +unpleasant_read[1] +pleasant_imagine[1] +neutral_imagine[1] +unpleasant_imagine[1]' \
   -glt_label 1 Overall_Modulation \
   -gltsym 'SYM: +pleasant_read[1] +neutral_read[1] +unpleasant_read[1] -pleasant_imagine[1] -neutral_imagine[1] -unpleasant_imagine[1]' \
   -glt_label 2 Mod_Read_vs_Imagine \
-  -gltsym 'SYM: +0.5*pleasant_imagine[1] +0.5*unpleasant_imagine[1] -1.0*neutral_imagine[1]' \
-  -glt_label 3 Mod_Imagine_Emotion_vs_Neutral \
-  -bucket "$TARGET/paramod_block/stats.${SUBJ}" \
-  -x1D "$TARGET/paramod_block/Xmat.1D" \
-  -xjpeg "$TARGET/paramod_block/X.jpg" \
-    -fout \
-    -tout
+  -gltsym 'SYM: +0.5*pleasant_read[1] +0.5*unpleasant_read[1] +0.5*pleasant_imagine[1] +0.5*unpleasant_imagine[1] -1.0*neutral_read[1] -1.0*neutral_imagine[1]' \
+  -glt_label 3 Mod_Emotional_vs_Neutral \
+  -gltsym 'SYM: +0.5*pleasant_read[1] +0.5*unpleasant_read[1] -1.0*neutral_read[1] -0.5*pleasant_imagine[1] -0.5*unpleasant_imagine[1] +1.0*neutral_imagine[1]' \
+  -glt_label 4 Mod_Task_x_Emotion_Interaction \
+  -gltsym 'SYM: +pleasant_read[0] +neutral_read[0] +unpleasant_read[0] -pleasant_imagine[0] -neutral_imagine[0] -unpleasant_imagine[0]' \
+  -glt_label 5 Mean_Read_vs_Imagine \
+  -gltsym 'SYM: +0.5*pleasant_read[0] +0.5*unpleasant_read[0] +0.5*pleasant_imagine[0] +0.5*unpleasant_imagine[0] -1.0*neutral_read[0] -1.0*neutral_imagine[0]' \
+  -glt_label 6 Mean_Emotional_vs_Neutral \
+  -gltsym 'SYM: +0.5*pleasant_read[0] +0.5*unpleasant_read[0] -1.0*neutral_read[0]' \
+  -glt_label 7 Mean_Read_Emotion_vs_Neutral \
+  -gltsym 'SYM: +0.5*pleasant_imagine[0] +0.5*unpleasant_imagine[0] -1.0*neutral_imagine[0]' \
+  -glt_label 8 Mean_Imagine_Emotion_vs_Neutral \
+  -gltsym 'SYM: +0.5*pleasant_read[0] +0.5*unpleasant_read[0] -1.0*neutral_read[0] -0.5*pleasant_imagine[0] -0.5*unpleasant_imagine[0] +1.0*neutral_imagine[0]' \
+  -glt_label 9 Mean_Task_x_Emotion_Interaction \
+  -x1D "$outdir/X.xmat.1D" \
+  -xjpeg "$outdir/X.jpg" \
+  -x1D_uncensored "$outdir/X.nocensor.xmat.1D" \
+  -errts "$outdir/errts.${SUBJ}" \
+  -cbucket "$outdir/all_betas.${SUBJ}" \
+  -bucket "$outdir/stats.${SUBJ}" \
+  -fout -tout
 done
+
+  if [[ $? -ne 0 ]]; then
+    echo "** 3dDeconvolve failed for $SUBJ, skipping"
+    continue
+  fi
+
+  # Patch REML command to allow overwriting
+  sed -i '' 's/3dREMLfit/3dREMLfit -overwrite/' "$outdir/stats.REML_cmd"
+
+  tcsh -x "$outdir/stats.REML_cmd"
+
+  if [[ $? -ne 0 ]]; then
+    echo "** 3dREMLfit failed for $SUBJ"
+    continue
+  fi

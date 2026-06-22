@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+PARTDIR="/Volumes/ELEMENTS/imagery/participants"
+GROUPDIR="/Volumes/ELEMENTS/imagery/group_results"
+mkdir -p "$GROUPDIR"
+MASK="$PARTDIR/par_01/fmri/PROC_cspline/mask_group+tlrc"
+
+contrasts=( "pleasant" "neutral" "unpleasant" "Overall_Modulation" "Mod_Read_vs_Imagine" "Mod_Emotional_vs_Neutral" "Mod_Task_x_Emotion_Interaction" "Mean_Read_vs_Imagine" "Mean_Emotional_vs_Neutral" "Mean_Read_Emotion_vs_Neutral" "Mean_Imagine_Emotion_vs_Neutral" "Mean_Task_x_Emotion_Interaction" )
+
+for contrast_name in "${contrasts[@]}"; do
+  echo "=== Building inputs for: $contrast_name ==="
+  mema_args=()
+
+  for subdir in "$PARTDIR"/par_*; do
+    SUBJ="${subdir##*/}"
+    statsfile="$subdir/fmri/paramod_block/stats.${SUBJ}_REML+tlrc"
+    if [[ ! -f "${statsfile}.HEAD" ]]; then
+      echo "** Missing REML for $SUBJ, skipping"
+      continue
+    fi
+    mema_args+=( "$SUBJ" "${statsfile}[${contrast_name}#0_Coef]" "${statsfile}[${contrast_name}#0_Tstat]" )
+  done
+
+  echo "   Subjects included: $(( ${#mema_args[@]} / 3 ))"
+  echo "   Output prefix: $GROUPDIR/MEMA_paramod_${contrast_name}"
+
+  3dMEMA -prefix "$GROUPDIR/MEMA_paramod_${contrast_name}" -jobs 4 -mask "$MASK" -HKtest -set "$contrast_name" "${mema_args[@]}"
+
+  echo "=== Done: $contrast_name ==="
+done

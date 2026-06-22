@@ -1,0 +1,16 @@
+
+#!/usr/bin/env bash
+PARTDIR="/Volumes/ELEMENTS/imagery/participants"
+GROUPDIR="/Volumes/ELEMENTS/imagery/fmri/group_results"
+
+3dMVM -prefix "$GROUPDIR/MVM_HRFshape" \
+  -jobs 4 \
+  -mask "$PARTDIR/par_01/fmri/PROC_cspline/mask_group+tlrc" \
+  -bsVars 1 \
+  -wsVars "Valence*Time" \
+  -num_glt 4 \
+  -gltLabel 1 pleasant-neutral -gltCode 1 'Valence : 1*pleasant -1*neutral' \
+  -gltLabel 2 unpleasant-neutral -gltCode 2 'Valence : 1*unpleasant -1*neutral' \
+  -gltLabel 3 emotional-neutral -gltCode 3 'Valence : 0.5*pleasant 0.5*unpleasant -1*neutral' \
+  -gltLabel 4 pleasant-unpleasant -gltCode 4 'Valence : 1*pleasant -1*unpleasant' \
+  -dataTable @"$GROUPDIR/MVM_HRFshape_datatable.txt"

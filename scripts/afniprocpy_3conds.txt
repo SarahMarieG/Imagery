@@ -5,6 +5,7 @@ ROOT="/Volumes/ELEMENTS/imagery/fmri"
 TPL="MNI152_2009_template_SSW.nii.gz"
 BLUR=4.0
 BASIS='CSPLINzero(0,31,15)'
+#CSPLINzero(0,31,15)
 CONDS=(pleasant neutral unpleasant)
 
 for subdir in "$ROOT"/par_*; do
