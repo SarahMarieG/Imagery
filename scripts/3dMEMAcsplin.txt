@@ -4,7 +4,7 @@ PARTDIR="/Volumes/ELEMENTS/imagery/participants"
 GROUPDIR="/Volumes/ELEMENTS/imagery/fmri/group_results/3dMEMAcsplin" 
 mkdir -p "$GROUPDIR" 
 
-contrasts=( "pleasant-neutral" "unpleasant-neutral" "pleasant-unpleasant" "emotional-neutral" )
+contrasts=( "allconds" "pleasant-neutral" "unpleasant-neutral" "pleasant-unpleasant" "emotional-neutral" )
 
 for contrast_name in "${contrasts[@]}"; do
   echo "=== Building inputs for: $contrast_name ==="
@@ -12,7 +12,7 @@ for contrast_name in "${contrasts[@]}"; do
 
   for subdir in "$PARTDIR"/par_*; do
     SUBJ="${subdir##*/}"
-    statsfile="$subdir/fmri/PROC_cspline_new/stats.${SUBJ}_REML+tlrc"
+    statsfile="$subdir/fmri/PROC_cspline/stats.${SUBJ}_REML+tlrc"
     if [[ ! -f "${statsfile}.HEAD" ]]; then
       echo "** Missing REML for $SUBJ, skipping"
       continue

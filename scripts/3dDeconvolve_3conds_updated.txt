@@ -9,10 +9,10 @@ for subdir in "$PARDIR"/par_*; do
   SUBJ="${subdir##*/}"
   fmridir="$subdir/fmri"
   
-  mkdir -p "$fmridir/PROC_cspline_new"
+  mkdir -p "$fmridir/PROC_cspline"
 
   indir="$fmridir/PROC_cspline"
-  outdir="$fmridir/PROC_cspline_new"
+  outdir="$fmridir/PROC_cspline"
 
   [[ -d "$indir" ]] || { echo "No PROC dir for $SUBJ, skipping"; continue; }
   cd "$indir" || continue
@@ -68,11 +68,12 @@ for subdir in "$PARDIR"/par_*; do
     -iresp 2 "$outdir/iresp_neutral.${SUBJ}" \
     -iresp 3 "$outdir/iresp_unpleasant.${SUBJ}" \
     -fout -tout \
-    -gltsym 'SYM: +pleasant -neutral'               -glt_label 1 pleasant-neutral \
-    -gltsym 'SYM: +unpleasant -neutral'             -glt_label 2 unpleasant-neutral \
-    -gltsym 'SYM: +pleasant -unpleasant'            -glt_label 3 pleasant-unpleasant \
-    -gltsym 'SYM: +pleasant +unpleasant -2*neutral' -glt_label 4 emotional-neutral \
-      -x1D "$outdir/X.xmat.1D" \
+    -gltsym 'SYM: 0.333*pleasant +0.333*unpleasant +0.333*neutral' -glt_label 1 allconds \
+    -gltsym 'SYM: +pleasant -neutral'               -glt_label 2 pleasant-neutral \
+    -gltsym 'SYM: +unpleasant -neutral'             -glt_label 3 unpleasant-neutral \
+    -gltsym 'SYM: +pleasant -unpleasant'            -glt_label 4 pleasant-unpleasant \
+    -gltsym 'SYM: +pleasant +unpleasant -2*neutral' -glt_label 5 emotional-neutral \
+    -x1D "$outdir/X.xmat.1D" \
     -xjpeg "$outdir/X.jpg" \
     -x1D_uncensored "$outdir/X.nocensor.xmat.1D" \
     -errts "$outdir/errts.${SUBJ}" \
@@ -84,8 +85,7 @@ for subdir in "$PARDIR"/par_*; do
     continue
   fi
 
-  # Patch REML command to allow overwriting existing outputs
-  sed -i '' 's/3dREMLfit/3dREMLfit -overwrite/' stats.REML_cmd
+  echo "   Executing REML fit automatically..."
 
   tcsh -x stats.REML_cmd
 
