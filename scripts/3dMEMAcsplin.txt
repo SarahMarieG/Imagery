@@ -1,7 +1,7 @@
 #!/usr/bin/env bash 
 
 PARTDIR="/Volumes/ELEMENTS/imagery/participants" 
-GROUPDIR="/Volumes/ELEMENTS/imagery/fmri/group_results/3dMEMAcsplin" 
+GROUPDIR="/Volumes/ELEMENTS/imagery/fmri/group_results/3dMEMAcsplin_new" 
 mkdir -p "$GROUPDIR" 
 
 contrasts=( "allconds" "pleasant-neutral" "unpleasant-neutral" "pleasant-unpleasant" "emotional-neutral" )
@@ -23,7 +23,7 @@ for contrast_name in "${contrasts[@]}"; do
   echo "   Subjects included: $(( ${#mema_args[@]} / 3 ))"
   echo "   Output prefix: $GROUPDIR/MEMA_csp_${contrast_name}"
 
-  3dMEMA -prefix "$GROUPDIR/MEMA_csp_${contrast_name}" -jobs 4 -mask "$PARTDIR/par_01/fmri/PROC_cspline/mask_group+tlrc" -HKtest -set "$contrast_name" "${mema_args[@]}"
+  3dMEMA -prefix "$GROUPDIR/MEMA_csp_${contrast_name}" -jobs 4 -mask "$PARTDIR/par_01/fmri/PROC_cspline/mask_group+tlrc" -HKtest -set "$contrast_name" "${mema_args[@]}" -residual_Z
 
   echo "=== Done: $contrast_name ==="
 done

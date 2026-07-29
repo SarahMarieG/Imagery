@@ -1,13 +1,16 @@
 library(tidyverse)
 library(ggdist)
 library(patchwork)
+library(patchwork)
 
-ratings <- readxl::read_xlsx("C:/Users/sarah/Downloads/DemoSAMPostQ.xlsx")
+#ratings <- readxl::read_xlsx("C:/Users/sarah/Downloads/DemoSAMPostQ.xlsx")
+ratings <- readxl::read_xlsx('/Users/sgardy/UF Dropbox/Sarah Gardy/LabFiles/Imagery/ratings4R.xlsx')
 
 # Pivot to long format
 ratings_long <- ratings %>%
+  mutate(across(starts_with(c("val_", "ar_")), as.numeric)) %>%
   pivot_longer(
-    cols = -subject,
+    cols = starts_with(c("val_", "ar_")), 
     names_to = c("rating_type", "condition"),
     names_pattern = "^(val|ar)_(.+)$"
   ) %>%
@@ -21,9 +24,6 @@ ratings_long <- ratings %>%
     rating_type = recode(rating_type, val = "Valence", ar = "Arousal")
   )
 
-
-library(tidyverse)
-library(patchwork)
 
 # --- 1. Summarize to category level per participant ---
 df_category <- ratings_long %>%
@@ -76,17 +76,14 @@ p_ar <- df_category %>%
   filter(rating_type == "Arousal") %>%
   ggplot(aes(x = valence_category, y = mean_rating,
              color = valence_category, group = subject)) +
-  
   geom_line(aes(group = subject), color = "gray70", alpha = 0.6, linewidth = 0.4) +
   geom_point(size = 2.5, alpha = 0.6) +
-  
   stat_summary(aes(group = 1), fun = mean, geom = "line",
                color = "gray30", linewidth = 1.2) +
   stat_summary(aes(group = 1), fun.data = mean_se, geom = "errorbar",
                color = "gray30", width = 0, linewidth = 1.2) +
   stat_summary(aes(group = 1), fun = mean, geom = "point",
                color = "gray30", size = 2.5) +
-  
   scale_color_manual(values = category_colors) +
   scale_y_continuous(limits = c(1, 9), breaks = seq(1, 9, 2),
                      expand = expansion(mult = c(0.02, 0.02))) +
@@ -99,7 +96,8 @@ p_final <- p_val + p_ar +
   plot_layout(widths = c(1, 1)) +
   plot_annotation(
     title   = "Affective Ratings by Condition",
-    #caption = "Points are individual participant means. Lines connect the same participant across categories. Error bars reflect ±1 SE of the mean.",
+    #caption = "Points are individual participant means. Lines connect the 
+    #same participant across categories. Error bars reflect ±1 SE of the mean.",
     theme   = theme(
       plot.title   = element_text(hjust = 0.5, face = "bold", size = 14),
       #plot.caption = element_text(size = 9, color = "gray40", hjust = 0),
@@ -109,6 +107,6 @@ p_final <- p_val + p_ar +
 
 p_final
 
-setwd("/Users/sarah/UF Dropbox/Sarah Gardy/LabFiles/Paper Drafts/ImageryPaper")
-ggsave("affective_ratings.pdf", p_final,
-       width = 7, height = 4, units = "in", device = cairo_pdf)
+setwd('/Users/sgardy/UF Dropbox/Sarah Gardy/LabFiles/Paper Drafts/ImageryPaper')
+ggsave("affective_ratings.png", p_final,
+       width = 7, height = 4, units = "in", device = png)

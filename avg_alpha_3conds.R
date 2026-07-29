@@ -1,4 +1,7 @@
 #Alpha statistics on 2-second alpha (10-12s)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
 
 setwd("/Volumes/ELEMENTS/imagery/eeg")
 my_colors <- c("Pl" = "#91cf60", "N" = "#006ba6ff", "Un" = "#d81134ff")
@@ -77,9 +80,9 @@ ggplot(alphastats_early_long, aes(x = Condition, y = Value, fill = Condition)) +
     plot.title = element_text(hjust = 0.5)
   )
 
-setwd("/UF Dropbox/Sarah Gardy/LabFiles/Paper Drafts/ImageryPaper")
+setwd('/Users/sgardy/UF Dropbox/Sarah Gardy/LabFiles/Paper Drafts/ImageryPaper')
 ggsave(
-  "imagery_avg_alpha_parbycond.pdf",
+  "imagery_avg_alpha_parbycond.png",
   plot = last_plot(),
   scale = 1,
   width = 6,

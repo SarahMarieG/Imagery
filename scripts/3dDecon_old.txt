@@ -3,7 +3,7 @@ ROOT=/Users/sgardy/Documents/SarahData/Imagery/Data/rawMRI
 
 3dDeconvolve \
   -input $ROOT/par_03/PROC_par_03_e6b/pb04.par_03.r02.scale+tlrc.HEAD \
-  -mask $ROOT/par_03/PROC_par_03_e6b/full_mask.par_03+tlrc.HEAD \
+  -mask $ROOT/par_03/PROC_par_03_e6b/mask_group+tlrc.HEAD \
   -censor $ROOT/par_03/PROC_par_03_e6b/dfile.r02.1D \
   -polort A \
   -num_stimts 3 \

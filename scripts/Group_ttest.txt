@@ -1,7 +1,14 @@
 #do tests on contrasts; create mask from significant clusters for script '3dmasking" (not necessary, need to revisit tho)
-3dttest++ -prefix group_emotional_vs_neutral_pars \
+
+mkdir -p /Volumes/ELEMENTS/imagery/fmri/group_results/etac_emo_neu
+
+cd /Volumes/ELEMENTS/imagery/fmri/group_results/etac_emo_neu
+
+3dttest++ -prefix emo-neu \
           -mask /Volumes/ELEMENTS/imagery/participants/par_01/fmri/PROC_cspline/mask_group+tlrc \
-          -Clustsim \
+          -ETAC \
+          -ETAC_blur 0 4 \
+          -ETAC_opt NN=2:sid=2:hpow=0:pthr=0.01/0.001/10:FPR=5:name=emo_neu \
           -toz \
           -setA \
           /Volumes/ELEMENTS/imagery/participants/par_01/fmri/PROC_cspline/stats.par_01_REML+tlrc.HEAD'[emotional-neutral#0_Coef]' \

@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+ROOT="/Volumes/ELEMENTS/imagery"
+PARDIR="$ROOT/participants"
+
+#GLOBAL_MASK="/Volumes/ELEMENTS/imagery/masks_and_templates/visual_roi+tlrc"
+GLOBAL_MASK="/Volumes/ELEMENTS/imagery/fmri/group_analysis/3dMEMAcsplin_new/MEMA_clusters_map+tlrc"
+
+CONDITIONS=("pleasant" "neutral" "unpleasant")
+
+CSV_OUT="$ROOT/group_iresp_curves.csv"
+
+echo "subject,condition,time,value" > "$CSV_OUT"
+
+for subdir in $PARDIR/par_*; do
+      SUBJ="${subdir##*/}"
+      DATA_DIR="$PARDIR/$SUBJ/fmri/PROC_cspline"
+      MASTER_FILE="${DATA_DIR}/iresp_neutral.${SUBJ}+tlrc"
+        
+      if [ ! -f "${MASTER_FILE}.HEAD" ] && [ ! -f "${MASTER_FILE}" ]; then
+          echo "WARNING: Could not find master file: ${MASTER_FILE}"
+          echo "Skipping ${SUBJ}…"
+          continue
+      fi
+        
+      RESAMPLED_MASK="${DATA_DIR}/${SUBJ}_vis_mask_resampled+tlrc"
+        
+      echo "Resampling ROI..."
+
+      3dresample -master "${MASTER_FILE}" \
+                 -input "${GLOBAL_MASK}" \
+                 -prefix "${RESAMPLED_MASK}" \
+                 -overwrite
+        
+      for COND in "${CONDITIONS[@]}"; do
+            
+          IRESP_INPUT="${DATA_DIR}/iresp_${COND}.${SUBJ}+tlrc"
+          OUTPUT_CURVE="${DATA_DIR}/${SUBJ}_curve_${COND}.1D"
+            
+	if [ -f "${IRESP_INPUT}.HEAD" ]; then 
+		echo "Extracting ${COND}..." 
+
+		3dmaskave -mask "${RESAMPLED_MASK}" \
+ 		-quiet \
+		"${IRESP_INPUT}" > "${OUTPUT_CURVE}"
+
+ 		echo "${OUTPUT_CURVE}" >> "$ROOT/all_subjects_${COND}.txt"
+
+            # Append to group CSV
+            awk \
+                -v subj="$SUBJ" \
+                -v cond="$COND" \
+                '{
+                    print subj "," cond "," NR-1 "," $1
+                }' \
+                "${OUTPUT_CURVE}" >> "$CSV_OUT"
+
+            else
+                echo " ! WARNING: Missing expected file: ${IRESP_INPUT}.HEAD"
+            fi
+
+        done
+
+     echo "Done with ${SUBJ}!" 
+
+done
+
+

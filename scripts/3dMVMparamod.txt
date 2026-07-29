@@ -32,7 +32,7 @@ done
 3dMVM \
   -prefix "$OUTDIR/results" \
   -jobs 8 \
-  -mask "$ROOT/participants/par_01/fmri/PROC_cspline/full_mask.par_01+tlrc.HEAD" \
+  -mask "$ROOT/participants/par_01/fmri/PROC_cspline/mask_group+tlrc.HEAD" \
   -bsVars 1 \
   -wsVars "Emotion*Task" \
   -num_glt 3 \
