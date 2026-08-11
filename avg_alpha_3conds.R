@@ -43,7 +43,7 @@ ggplot(alphastats_long, aes(x = Condition, y = Value, fill = Condition)) +
   scale_x_discrete(labels = c("Pl" = "Pleasant", "N" = "Neutral", "Un" = "Unpleasant")) +
   theme_minimal() +
   labs(
-    title = "Alpha Power By Condition",
+    #title = "Alpha Power By Condition",
     x = "Condition",
     y = "Alpha Power (µV)"
   ) +
@@ -70,7 +70,7 @@ ggplot(alphastats_early_long, aes(x = Condition, y = Value, fill = Condition)) +
   scale_fill_manual(values = my_colors) +
   scale_color_manual(values = my_colors) +
   labs(
-    title = "Alpha Power By Condition",
+    #title = "Alpha Power By Condition",
     x = "Condition",
     y = "Alpha Power (µV)"
   ) +
@@ -85,8 +85,8 @@ ggsave(
   "imagery_avg_alpha_parbycond.png",
   plot = last_plot(),
   scale = 1,
-  width = 6,
-  height = 6,
+  width = 4,
+  height = 4,
   units = c("in"),
   dpi = 300
 )

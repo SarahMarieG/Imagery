@@ -5,12 +5,13 @@ library(ggplot2)
 
 setwd("/Volumes/ELEMENTS/imagery")
 
-iresp = read.csv("group_iresp_curves.csv")
+#iresp = read.csv("group_iresp_curves.csv")
+iresp = read.csv("/Volumes/ELEMENTS/imagery/frontal_iresp_curves.csv")
 
-iresp_par <- iresp %>% filter(subject %in% c("par_03"))
+iresp <- iresp %>% filter(subject %in% c("par_02"))
 
 summary_iresp <-
-  iresp_par %>%
+  iresp %>%
   group_by(condition, time) %>%
   summarise(
     mean = mean(value, na.rm=TRUE),
@@ -20,7 +21,7 @@ summary_iresp <-
     .groups="drop"
   )
 
-my_colors <- c("Pl" = "#91cf60", "N" = "#006ba6ff", "Un" = "#d81134ff")
+#my_colors <- c("Pl" = "#91cf60", "N" = "#006ba6ff", "Un" = "#d81134ff")
 
 # Plot ####
   ggplot(summary_iresp,

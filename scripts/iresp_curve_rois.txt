@@ -3,11 +3,13 @@ ROOT="/Volumes/ELEMENTS/imagery"
 PARDIR="$ROOT/participants"
 
 #GLOBAL_MASK="/Volumes/ELEMENTS/imagery/masks_and_templates/visual_roi+tlrc"
-GLOBAL_MASK="/Volumes/ELEMENTS/imagery/fmri/group_analysis/3dMEMAcsplin_new/MEMA_clusters_map+tlrc"
+#GLOBAL_MASK="/Volumes/ELEMENTS/imagery/fmri/group_analysis/3dMEMAcsplin_new/MEMA_clusters_map+tlrc"
+GLOBAL_MASK="/Volumes/ELEMENTS/imagery/fmri/group_analysis/3dMEMAcsplin_new/Clust_mask+tlrc"
+
 
 CONDITIONS=("pleasant" "neutral" "unpleasant")
 
-CSV_OUT="$ROOT/group_iresp_curves.csv"
+CSV_OUT="$ROOT/frontal_iresp_curves.csv"
 
 echo "subject,condition,time,value" > "$CSV_OUT"
 

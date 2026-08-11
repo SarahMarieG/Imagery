@@ -71,25 +71,25 @@ for sub = 1:20
    % writematrix(NTR_centered, fullfile(sub_folder, 'parmod_neutral.txt'));
    % writematrix(UPL_centered, fullfile(sub_folder, 'parmod_unpleasant.txt'));
 
-    % figure;
-    % % Plot PLE
-    % subplot(3,1,1);
-    % plot(PLE.WaPower_singtrls, 'k-o', 'MarkerFaceColor', 'g'); hold on;
-    % plot(PLE_corr, 'bx', 'MarkerSize', 10, 'LineWidth', 2);
-    % title(['Sub ' num2str(sub) ' PLE']);
-    % 
-    % % Plot NTR
-    % subplot(3,1,2);
-    % plot(NTR.WaPower_singtrls, 'k-o', 'MarkerFaceColor', 'g'); hold on;
-    % plot(NTR_corr, 'bx', 'MarkerSize', 10, 'LineWidth', 2);
-    % title('NTR');
-    % 
-    % % Plot UPL
-    % subplot(3,1,3);
-    % plot(UPL.WaPower_singtrls, 'k-o', 'MarkerFaceColor', 'g'); hold on;
-    % plot(UPL_corr, 'bx', 'MarkerSize', 10, 'LineWidth', 2);
-    % title('UPL');
-    % xlabel('Trial Number');
-    % 
+    figure;
+    % Plot PLE
+    subplot(3,1,1);
+    plot(PLE.WaPower_singtrls, 'k-o', 'MarkerFaceColor', 'g'); hold on;
+    plot(PLE_corr, 'bx', 'MarkerSize', 10, 'LineWidth', 2);
+    title(['Sub ' num2str(sub) ' PLE']);
+
+    % Plot NTR
+    subplot(3,1,2);
+    plot(NTR.WaPower_singtrls, 'k-o', 'MarkerFaceColor', 'g'); hold on;
+    plot(NTR_corr, 'bx', 'MarkerSize', 10, 'LineWidth', 2);
+    title('NTR');
+
+    % Plot UPL
+    subplot(3,1,3);
+    plot(UPL.WaPower_singtrls, 'k-o', 'MarkerFaceColor', 'g'); hold on;
+    plot(UPL_corr, 'bx', 'MarkerSize', 10, 'LineWidth', 2);
+    title('UPL');
+    xlabel('Trial Number');
+
 
 end

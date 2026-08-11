@@ -1,0 +1,30 @@
+#!/bin/bash
+
+SUBJECTS=(par_01 par_02 par_03 par_04 par_05 par_06 par_07 par_09 par_10 par_12 par_13 par_14 par_15 par_16 par_17 par_18 par_19 par_20 par_21)
+DATA_DIR="/Volumes/ELEMENTS/imagery"
+OUTPUT_DIR="${DATA_DIR}/fmri/group_analysis/iresp_grandmean"
+
+mkdir -p "${OUTPUT_DIR}"
+
+for COND in pleasant neutral unpleasant; do
+    INPUT_FILES=()
+
+    for SUB in "${SUBJECTS[@]}"; do
+        INPUT_FILES+=("${DATA_DIR}/participants/${SUB}/fmri/PROC_cspline/iresp_${COND}.${SUB}+tlrc.HEAD")
+    done                         
+
+    # sanity check — remove once working
+    echo "=== ${COND}: ${#INPUT_FILES[@]} files ==="
+    printf '  %s\n' "${INPUT_FILES[@]}"
+
+    3dMean \
+        -prefix "${OUTPUT_DIR}/grandmean_iresp_${COND}" \
+        -sd \
+        "${INPUT_FILES[@]}"
+
+done
+
+
+
+#@AfniEnv -set AFNI_SUPP_ATLAS_DIR /Users/Shared/afni/afni_sy_atlas
+#@AfniEnv -set AFNI_ATLAS_LIST ALL

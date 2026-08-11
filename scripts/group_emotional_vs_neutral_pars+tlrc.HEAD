@@ -1,0 +1,161 @@
+
+type = string-attribute
+name = HISTORY_NOTE
+count = 2523
+'[sgardy@PSY-45Q469C: Mon Jul 20 23:05:26 2026] {AFNI_25.2.05:macos_13_ARM} 3dttest++ -prefix group_emotional_vs_neutral_pars -mask /Volumes/ELEMENTS/imagery/participants/par_01/fmri/PROC_cspline/mask_group+tlrc -ETAC -ETAC_blur 0 4 -toz -setA '/Volumes/ELEMENTS/imagery/participants/par_01/fmri/PROC_cspline/stats.par_01_REML+tlrc.HEAD[emotional-neutral#0_Coef]' '/Volumes/ELEMENTS/imagery/participants/par_02/fmri/PROC_cspline/stats.par_02_REML+tlrc.HEAD[emotional-neutral#0_Coef]' '/Volumes/ELEMENTS/imagery/participants/par_03/fmri/PROC_cspline/stats.par_03_REML+tlrc.HEAD[emotional-neutral#0_Coef]' '/Volumes/ELEMENTS/imagery/participants/par_04/fmri/PROC_cspline/stats.par_04_REML+tlrc.HEAD[emotional-neutral#0_Coef]' '/Volumes/ELEMENTS/imagery/participants/par_05/fmri/PROC_cspline/stats.par_05_REML+tlrc.HEAD[emotional-neutral#0_Coef]' '/Volumes/ELEMENTS/imagery/participants/par_06/fmri/PROC_cspline/stats.par_06_REML+tlrc.HEAD[emotional-neutral#0_Coef]' '/Volumes/ELEMENTS/imagery/participants/par_07/fmri/PROC_cspline/stats.par_07_REML+tlrc.HEAD[emotional-neutral#0_Coef]' '/Volumes/ELEMENTS/imagery/participants/par_09/fmri/PROC_cspline/stats.par_09_REML+tlrc.HEAD[emotional-neutral#0_Coef]' '/Volumes/ELEMENTS/imagery/participants/par_10/fmri/PROC_cspline/stats.par_10_REML+tlrc.HEAD[emotional-neutral#0_Coef]' '/Volumes/ELEMENTS/imagery/participants/par_12/fmri/PROC_cspline/stats.par_12_REML+tlrc.HEAD[emotional-neutral#0_Coef]' '/Volumes/ELEMENTS/imagery/participants/par_13/fmri/PROC_cspline/stats.par_13_REML+tlrc.HEAD[emotional-neutral#0_Coef]' '/Volumes/ELEMENTS/imagery/participants/par_14/fmri/PROC_cspline/stats.par_14_REML+tlrc.HEAD[emotional-neutral#0_Coef]' '/Volumes/ELEMENTS/imagery/participants/par_15/fmri/PROC_cspline/stats.par_15_REML+tlrc.HEAD[emotional-neutral#0_Coef]' '/Volumes/ELEMENTS/imagery/participants/par_16/fmri/PROC_cspline/stats.par_16_REML+tlrc.HEAD[emotional-neutral#0_Coef]' '/Volumes/ELEMENTS/imagery/participants/par_17/fmri/PROC_cspline/stats.par_17_REML+tlrc.HEAD[emotional-neutral#0_Coef]' '/Volumes/ELEMENTS/imagery/participants/par_18/fmri/PROC_cspline/stats.par_18_REML+tlrc.HEAD[emotional-neutral#0_Coef]' '/Volumes/ELEMENTS/imagery/participants/par_19/fmri/PROC_cspline/stats.par_19_REML+tlrc.HEAD[emotional-neutral#0_Coef]' '/Volumes/ELEMENTS/imagery/participants/par_20/fmri/PROC_cspline/stats.par_20_REML+tlrc.HEAD[emotional-neutral#0_Coef]' '/Volumes/ELEMENTS/imagery/participants/par_21/fmri/PROC_cspline/stats.par_21_REML+tlrc.HEAD[emotional-neutral#0_Coef]'~
+
+type = string-attribute
+name = TYPESTRING
+count = 15
+'3DIM_HEAD_FUNC~
+
+type = string-attribute
+name = IDCODE_STRING
+count = 27
+'AFN_jQ8wzFEVIpjaYvdltw_MYA~
+
+type = string-attribute
+name = IDCODE_DATE
+count = 25
+'Mon Jul 20 23:05:26 2026~
+
+type = integer-attribute
+name = SCENE_DATA
+count = 8
+ 2 11 1 -999 -999
+ -999 -999 -999
+
+type = string-attribute
+name = LABEL_1
+count = 5
+'zyxt~
+
+type = string-attribute
+name = LABEL_2
+count = 5
+'zyxt~
+
+type = string-attribute
+name = DATASET_NAME
+count = 5
+'zyxt~
+
+type = integer-attribute
+name = ORIENT_SPECIFIC
+count = 3
+ 1 2 4
+
+type  = float-attribute
+name  = ORIGIN
+count = 3
+             95            131            -77
+
+type  = float-attribute
+name  = DELTA
+count = 3
+             -2             -2              2
+
+type  = float-attribute
+name  = IJK_TO_DICOM
+count = 12
+             -2              0              0             95              0
+             -2              0            131              0              0
+              2            -77
+
+type  = float-attribute
+name  = IJK_TO_DICOM_REAL
+count = 12
+             -2              0              0             95              0
+             -2              0            131              0              0
+              2            -77
+
+type  = float-attribute
+name  = BRICK_STATS
+count = 4
+      -19.53696       13.09069      -5.110771       4.864355
+
+type = integer-attribute
+name = DATASET_RANK
+count = 8
+ 3 2 0 0 0
+ 0 0 0
+
+type = integer-attribute
+name = DATASET_DIMENSIONS
+count = 5
+ 96 114 96 0 0
+
+type = integer-attribute
+name = BRICK_TYPES
+count = 2
+ 3 3
+
+type  = float-attribute
+name  = BRICK_FLOAT_FACS
+count = 2
+              0              0
+
+type = string-attribute
+name = BRICK_LABS
+count = 20
+'SetA_mean~SetA_Zscr~
+
+type  = float-attribute
+name  = BRICK_STATAUX
+count = 3
+              1              5              0
+
+type = string-attribute
+name = BRICK_STATSYM
+count = 14
+'none;Zscore()~
+
+type  = float-attribute
+name  = FDRCURVE_000001
+count = 103
+   0.0001560014     0.04789819      0.3221518      0.3355085      0.3490951
+      0.3633526      0.3789842      0.3949109      0.4115266      0.4281315
+      0.4463089      0.4646531      0.4840722      0.5035879      0.5240923
+      0.5443535      0.5649629      0.5867454      0.6079463      0.6297525
+      0.6520761       0.673816      0.6960779       0.718714      0.7414121
+      0.7644113      0.7873333      0.8106322      0.8342708      0.8580924
+      0.8817077      0.9057917      0.9297365      0.9531384      0.9758939
+      0.9993071       1.022047       1.045002        1.06605       1.088381
+         1.1113       1.133494       1.154799       1.175386       1.196036
+       1.216684       1.237491       1.260513        1.28155       1.300462
+       1.319952       1.339857       1.359443       1.378097        1.39734
+       1.419161       1.436865       1.454865       1.472305       1.493743
+       1.517183       1.538033       1.557716       1.580006       1.600297
+       1.620673        1.63665       1.651844       1.667998       1.689835
+       1.707171       1.723816       1.745566         1.7602       1.782956
+       1.799744          1.817        1.82701       1.837475       1.850279
+       1.870658       1.878013       1.897198       1.915347       1.915886
+       1.915887       1.923059       1.956089       1.961272       1.962444
+       1.981527       1.991776       2.011935       2.021043       2.030151
+       2.039258       2.048048       2.067917       2.107164       2.169732
+        2.19417       2.206991       2.249752
+
+type  = float-attribute
+name  = MDFCURVE_000001
+count = 27
+      -4.906085       0.204418      0.9990069       0.998401      0.9976676
+      0.9962938      0.9946346      0.9916791      0.9877446      0.9818701
+      0.9736247      0.9626201      0.9470345      0.9247054      0.8943357
+      0.8553703      0.8015292      0.7294732      0.6349533      0.5172526
+      0.3749011      0.2219695     0.08270279    0.006444416   6.043273e-10
+   6.043273e-10              0
+
+type = string-attribute
+name = TEMPLATE_SPACE
+count = 15
+'MNI_2009c_asym~
+
+type = integer-attribute
+name = INT_CMAP
+count = 1
+ 0
+
+type = string-attribute
+name = BYTEORDER_STRING
+count = 10
+'LSB_FIRST~

@@ -24,6 +24,7 @@ ratings_long <- ratings %>%
     rating_type = recode(rating_type, val = "Valence", ar = "Arousal")
   )
 
+write_csv(ratings_long, "/Volumes/ELEMENTS/imagery/ratings_long.csv")
 
 # --- 1. Summarize to category level per participant ---
 df_category <- ratings_long %>%
@@ -95,11 +96,11 @@ p_ar <- df_category %>%
 p_final <- p_val + p_ar +
   plot_layout(widths = c(1, 1)) +
   plot_annotation(
-    title   = "Affective Ratings by Condition",
+    #title   = "Affective Ratings by Condition",
     #caption = "Points are individual participant means. Lines connect the 
     #same participant across categories. Error bars reflect ±1 SE of the mean.",
     theme   = theme(
-      plot.title   = element_text(hjust = 0.5, face = "bold", size = 14),
+     # plot.title   = element_text(hjust = 0.5, face = "bold", size = 14),
       #plot.caption = element_text(size = 9, color = "gray40", hjust = 0),
       plot.margin  = margin(t = 5, r = 5, b = 5, l = 5)
     )
@@ -108,5 +109,5 @@ p_final <- p_val + p_ar +
 p_final
 
 setwd('/Users/sgardy/UF Dropbox/Sarah Gardy/LabFiles/Paper Drafts/ImageryPaper')
-ggsave("affective_ratings.png", p_final,
-       width = 7, height = 4, units = "in", device = png)
+ggsave("affective_ratings.pdf", p_final,
+       width = 7, height = 3, units = "in", device = pdf)

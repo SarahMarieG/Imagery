@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 PARTDIR="/Volumes/ELEMENTS/imagery/participants"
-GROUPDIR="/Volumes/ELEMENTS/imagery/group_results"
+GROUPDIR="/Volumes/ELEMENTS/imagery/fmri/group_results_paramod"
 mkdir -p "$GROUPDIR"
 MASK="$PARTDIR/par_01/fmri/PROC_cspline/mask_group+tlrc"
 
-contrasts=( "pleasant" "neutral" "unpleasant" "Overall_Modulation" "Mod_Read_vs_Imagine" "Mod_Emotional_vs_Neutral" "Mod_Task_x_Emotion_Interaction" "Mean_Read_vs_Imagine" "Mean_Emotional_vs_Neutral" "Mean_Read_Emotion_vs_Neutral" "Mean_Imagine_Emotion_vs_Neutral" "Mean_Task_x_Emotion_Interaction" )
+contrasts=( "pleasant" "neutral" "unpleasant" "Overall_Modulation" "Mod_Read_vs_Imagine" "Mod_Emotional_vs_Neutral" "Mod_Read_Emotion_vs_Neutral" "Mod_Imagine_Emotion_vs_Neutral" )
 
 for contrast_name in "${contrasts[@]}"; do
   echo "=== Building inputs for: $contrast_name ==="

@@ -1,0 +1,24 @@
+<global_ETAC_thresholds
+  ni_type="float"
+  ni_dimen="10,1"
+  ni_axes="zthr,FOM"
+  NNlev="2"
+  NNsid="2"
+  min_clust="5"
+  case="B0.0"
+  FOM_list="hpow2"
+  zthr_list="2.57583,2.61205,2.65207,2.69684,2.74778,2.80703,2.87816,2.96774,3.09023,3.29053"
+  FAR_goal="5.00"
+  ni_veclab="thresh" >
+ 4865.968
+ 4367.74
+ 3927.74
+ 3491.555
+ 2960.403
+ 2517.601
+ 2120.48
+ 1719.358
+ 1297.112
+ 855.2455
+</global_ETAC_thresholds>
+
