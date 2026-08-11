@@ -1,41 +1,49 @@
 library(tidyverse)
 library(dplyr)
 library(ggplot2)
+library(Rmisc)
 
-
-setwd("/Volumes/ELEMENTS/imagery")
 
 #iresp = read.csv("group_iresp_curves.csv")
 iresp = read.csv("/Volumes/ELEMENTS/imagery/frontal_iresp_curves.csv")
+iresp = read.csv("/Volumes/ELEMENTS/imagery/group_iresp_curves.csv")
 
-iresp <- iresp %>% filter(subject %in% c("par_02"))
+#iresp <- iresp %>% filter(subject %in% c("par_02"))
 
-summary_iresp <-
-  iresp %>%
-  group_by(condition, time) %>%
-  summarise(
-    mean = mean(value, na.rm=TRUE),
-    sd = sd(value, na.rm=TRUE),
-    n = n(),
-    se = sd/sqrt(n),
-    .groups="drop"
+# summary_iresp <-
+#   iresp %>%
+#   group_by(condition, time) %>%
+#   summarise(
+#     mean = mean(value, na.rm=TRUE),
+#     sd = sd(value, na.rm=TRUE),
+#     n = n(),
+#     se = sd/sqrt(n),
+#     .groups="drop"
+#   )
+
+
+summary_iresp <- iresp %>%
+  summarySEwithin(
+    measurevar = "value",
+    withinvars = c("condition", "time"),
+    idvar = "subject"
   )
+
 
 #my_colors <- c("Pl" = "#91cf60", "N" = "#006ba6ff", "Un" = "#d81134ff")
 
 # Plot ####
   ggplot(summary_iresp,
          aes(x=time,
-             y=mean,
+             y=value,
+             group = condition,
              color=condition,
              fill=condition)) +
-  
   geom_line(size=1.3) +
-  
   geom_ribbon(
     aes(
-      ymin=mean-se,
-      ymax=mean+se
+      ymin=value-se,
+      ymax=value+se
     ),
     alpha=.20,
     colour=NA
@@ -58,7 +66,6 @@ summary_iresp <-
     y="Mean iresp",
     title="ROI IRESP Curves"
   ) +
-  
   theme_classic(base_size=15)
 
 
@@ -75,7 +82,7 @@ ggsave(
 peak_table <-
   summary_iresp %>%
   group_by(condition) %>%
-  slice_max(mean, n=1)
+  max(value, n=1)
 
 print(peak_table)
 
