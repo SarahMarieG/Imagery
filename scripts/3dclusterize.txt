@@ -1,0 +1,1 @@
+3dClusterize -nosum -inset MEMA_csp_allconds+tlrc -idat 0 -ithr 1 -NN 2 -bisided -3.92 3.92 -clust_nvox 39 -pref_map MEMA_clusters_map_allconds

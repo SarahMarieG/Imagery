@@ -1,0 +1,110 @@
+#!/usr/bin/env bash
+# Define the prefix name for the Jülich Atlas as configured in your AFNI setup.
+ATLAS="Julich_MNI2009c"
+
+echo "=========================================================="
+echo "Starting ROI extraction using the Jülich Brain Atlas..."
+echo "=========================================================="
+
+
+# Helper function to find the closest matching region string in your specific atlas
+find_region() {
+    local pattern=$1
+    whereami -show_atlas_code -atlas "$ATLAS" | grep -i "$pattern" | head -n 1 | awk '{print $1}'
+}
+
+
+# 1. Precuneus (Typically mapped via Area 7 subregions like 7A, 7P, 7M)
+whereami -mask_atlas_region ${ATLAS}::hOc3v -prefix t_prec1.nii.gz 2>/dev/null
+REG_7A=$(find_region "7A")
+REG_7P=$(find_region "7P")
+REG_7M=$(find_region "7M")
+whereami -mask_atlas_region ${ATLAS}::${REG_7A} -prefix tmp_precA.nii.gz 2>/dev/null
+whereami -mask_atlas_region ${ATLAS}::${REG_7P} -prefix tmp_precP.nii.gz 2>/dev/null
+whereami -mask_atlas_region ${ATLAS}::${REG_7M} -prefix tmp_precM.nii.gz 2>/dev/null
+3dcalc -a tmp_precA.nii.gz -b tmp_precP.nii.gz -c tmp_precM.nii.gz -expr 'step(a)+step(b)+step(c)' -prefix ROI_Precuneus.nii.gz -overwrite
+
+# --- Posterior Cingulate Cortex (PCC) ---
+REG_V23=$(find_region "v23ab")
+REG_D23=$(find_region "d23ab")
+whereami -mask_atlas_region ${ATLAS}::${REG_V23} -prefix tmp_pcc1.nii.gz 2>/dev/null
+whereami -mask_atlas_region ${ATLAS}::${REG_D23} -prefix tmp_pcc2.nii.gz 2>/dev/null
+3dcalc -a tmp_pcc1.nii.gz -b tmp_pcc2.nii.gz -expr 'step(a)+step(b)' -prefix ROI_PCC.nii.gz -overwrite
+
+# --- Angular Gyrus ---
+REG_PGA=$(find_region "PGa")
+REG_PGP=$(find_region "PGp")
+whereami -mask_atlas_region ${ATLAS}::${REG_PGA} -prefix tmp_ang1.nii.gz 2>/dev/null
+whereami -mask_atlas_region ${ATLAS}::${REG_PGP} -prefix tmp_ang2.nii.gz 2>/dev/null
+3dcalc -a tmp_ang1.nii.gz -b tmp_ang2.nii.gz -expr 'step(a)+step(b)' -prefix ROI_AngularGyrus.nii.gz -overwrite
+
+
+# --- Lateral Temporal Cortex (Te1, Te2, Middle/Inferior Temporal subdivisions) ---
+REG_TE1=$(find_region "TE1.0")
+REG_TE3=$(find_region "TE3.0")
+whereami -mask_atlas_region ${ATLAS}::${REG_TE1} -prefix tmp_ltc1.nii.gz 2>/dev/null
+whereami -mask_atlas_region ${ATLAS}::${REG_TE3} -prefix tmp_ltc2.nii.gz 2>/dev/null
+3dcalc -a tmp_ltc1.nii.gz -b tmp_ltc2.nii.gz -expr 'step(a)+step(b)' -prefix ROI_LateralTemporal.nii.gz -overwrite
+
+
+# --- Temporal Pole ---
+REG_TGP=$(find_region "TGp")
+REG_TGA=$(find_region "TGa")
+whereami -mask_atlas_region ${ATLAS}::${REG_TGP} -prefix tmp_tp1.nii.gz 2>/dev/null
+whereami -mask_atlas_region ${ATLAS}::${REG_TGA} -prefix tmp_tp2.nii.gz 2>/dev/null
+3dcalc -a tmp_tp1.nii.gz -b tmp_tp2.nii.gz -expr 'step(a)+step(b)' -prefix ROI_TemporalPole.nii.gz -overwrite
+
+
+# --- Anterior Hippocampus ---
+# Jülich divides the Hippocampus along microstructural subfields (CA1, CA2, CA3, DG, Subiculum)
+REG_CA1=$(find_region "CA1")
+REG_CA2=$(find_region "CA2")
+REG_SUB=$(find_region "Subiculum")
+whereami -mask_atlas_region ${ATLAS}::${REG_CA1} -prefix tmp_hc1.nii.gz 2>/dev/null
+whereami -mask_atlas_region ${ATLAS}::${REG_CA2} -prefix tmp_hc2.nii.gz 2>/dev/null
+whereami -mask_atlas_region ${ATLAS}::${REG_SUB} -prefix tmp_hc3.nii.gz 2>/dev/null
+3dcalc -a tmp_hc1.nii.gz -b tmp_hc2.nii.gz -c tmp_hc3.nii.gz -expr 'step(a)+step(b)+step(c)' -prefix tmp_hc_total.nii.gz -overwrite
+# Isolate anterior slice (MNI coordinates y > -20)
+3dcalc -a tmp_hc_total.nii.gz -expr 'a*step(y+20)' -prefix ROI_AnteriorHippocampus.nii.gz -overwrite
+
+
+# --- dmPFC (Dorsomedial Prefrontal Cortex) ---
+REG_8D=$(find_region "8d")
+REG_9M=$(find_region "9m")
+whereami -mask_atlas_region ${ATLAS}::${REG_8D} -prefix tmp_dmpfc1.nii.gz 2>/dev/null
+whereami -mask_atlas_region ${ATLAS}::${REG_9M} -prefix tmp_dmpfc2.nii.gz 2>/dev/null
+3dcalc -a tmp_dmpfc1.nii.gz -b tmp_dmpfc2.nii.gz -expr 'step(a)+step(b)' -prefix ROI_dmPFC.nii.gz -overwrite
+
+
+# --- vlPFC (Ventrolateral Prefrontal Cortex) ---
+REG_44=$(find_region "44")
+REG_45=$(find_region "45")
+whereami -mask_atlas_region ${ATLAS}::${REG_44} -prefix tmp_vlpfc1.nii.gz 2>/dev/null
+whereami -mask_atlas_region ${ATLAS}::${REG_45} -prefix tmp_vlpfc2.nii.gz 2>/dev/null
+3dcalc -a tmp_vlpfc1.nii.gz -b tmp_vlpfc2.nii.gz -expr 'step(a)+step(b)' -prefix ROI_vlPFC.nii.gz -overwrite
+
+
+# --- Caudate Nucleus ---
+REG_CAU=$(find_region "Caudate")
+whereami -mask_atlas_region ${ATLAS}::${REG_CAU} -prefix ROI_Caudate.nii.gz -overwrite
+
+
+# --- Cerebellar Vermis ---
+REG_VER=$(find_region "Vermis")
+whereami -mask_atlas_region ${ATLAS}::${REG_VER} -prefix ROI_Vermis.nii.gz -overwrite
+
+# --- Lateral Cerebellum ---
+REG_CER_L=$(find_region "Cerebellum_Left")
+REG_CER_R=$(find_region "Cerebellum_Right")
+whereami -mask_atlas_region ${ATLAS}::${REG_CER_L} -prefix tmp_cer_l.nii.gz 2>/dev/null
+whereami -mask_atlas_region ${ATLAS}::${REG_CER_R} -prefix tmp_cer_r.nii.gz 2>/dev/null
+3dcalc -a tmp_cer_l.nii.gz -b tmp_cer_r.nii.gz -expr 'step(a)+step(b)' -prefix tmp_cer_all.nii.gz -overwrite
+# Subtract the medial Vermis structures to retain only lateral hemispheric voxels
+3dcalc -a tmp_cer_all.nii.gz -b ROI_Vermis.nii.gz -expr 'a*not(b)' -prefix ROI_LateralCerebellum.nii.gz -overwrite
+
+# Clean up temp files
+rm -f tmp_*.nii.gz
+
+echo "=========================================================="
+echo "Extraction completed. Check your directory for ROI_*.nii.gz files."
+echo "=========================================================="
