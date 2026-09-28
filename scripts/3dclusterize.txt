@@ -1,1 +1,57 @@
 3dClusterize -nosum -inset MEMA_csp_allconds+tlrc -idat 0 -ithr 1 -NN 2 -bisided -3.92 3.92 -clust_nvox 39 -pref_map MEMA_clusters_map_allconds
+
+
+3dClusterize -nosum -inset MEMA_paramod_Mod_Imagine_Emotion_vs_Neutral+tlrc \
+    -idat 0 -ithr 1 -NN 2 -bisided -3.965 +3.965 \
+    -clust_nvox 19 \
+    -pref_map MEMA_clusters_map_GM_emotion_vs_neutral
+
+
+ROOT="/Volumes/ELEMENTS/imagery"
+GROUP="$ROOT/fmri/group_results"
+for par in 01 03 04 05 06 07 09 10 12 13 14 15 16 17 18 19 20 21
+do
+3dFWHMx -mask "$GROUP/3dMEMAcsplin_imagine_new_graymask/Clust27_mask+tlrc" -input "$ROOT"/participants/par_${par}/fmri/paramod_block/errts.par_${par}_REML+tlrc -acf -out "$ROOT"/acf_BOLD27
+done
+
+
+0.805113  2.82043  13.3108
+0.497899  2.91939  9.67521
+0.830662  2.89082  14.1959
+0.741149  2.67623  11.0256
+0.912986  2.63366  13.5651
+0.827639  2.66369  6.18748
+0.339195  3.03819  8.08364
+0.521398  3.0252   8.79927
+0.769698  2.84546  13.1236
+0.577621  2.62302  8.32776
+0.651193  3.17881  13.3672
+0.773202  3.2553   15.7798
+0.648633  3.06472  10.8184
+0.580535  2.77521  10.1405
+0.452145  2.85847  8.83149
+0.723271  2.96518  12.0858 
+0.607941  3.16007  9.77308
+0.640124  2.80629  10.6709 
+
+
+ROOT="/Volumes/ELEMENTS/imagery/fmri"
+
+3dClustSim -mask "$ROOT/group_results/3dMEMAcsplin_imagine_new_graymask/Clust27_mask+tlrc" \
+    -acf 0.6611 2.9000 10.9868 \
+    -prefix "$ROOT/ClustSim_BOLD27"
+    -cmd
+
+
+
+
+
+3dClusterize \
+  -1Dformat \
+  -inset 'MEMA_csp_imagine_emotional-neutral_avg+tlrc' \
+  -idat 0 \
+  -ithr 1 \
+  -NN 2 \
+  -clust_nvox 11 \
+  -bisided p=0.001 \
+  -pref_map cspemo_clusters.nii.gz

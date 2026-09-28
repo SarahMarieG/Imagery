@@ -1,0 +1,21 @@
+#!/bin/bash
+
+OUTDIR="/Volumes/ELEMENTS/imagery/fmri/group_results/3dMEMAcsplin_imagine_new_graymask"
+PARTDIR="/Volumes/ELEMENTS/imagery/participants"
+CLUSTMASK="$OUTDIR/Clust_p001_a01_mask+tlrc"
+
+for cond in pleasant_imagine neutral_imagine unpleasant_imagine; do
+    files=()
+    for subdir in "$PARTDIR"/par_*; do
+        SUBJ=$(basename "$subdir")
+        files+=("$subdir/fmri/paramod_block/stats.${SUBJ}_REML+tlrc[${cond}#1_Coef]")
+    done
+    3dROIstats -mask "$CLUSTMASK" -nzmean "${files[@]}" > "$OUTDIR/${cond}_betas_emo.txt"
+done
+
+
+
+
+3dROIstats -mask /Volumes/ELEMENTS/imagery/fmri/group_results_paramod_graymask/Clust_mask_0001+tlrc '/Volumes/ELEMENTS/imagery/fmri/group_results_paramod_graymask/MEMA_paramod_Overall_Modulation_imagine+tlrc[1]'
+
+/Volumes/ELEMENTS/imagery/fmri/group_results_paramod_graymask/.HEAD

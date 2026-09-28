@@ -1,24 +1,36 @@
 #!/usr/bin/env bash
-PARTDIR="/Volumes/ELEMENTS/imagery/participants"
-GROUPDIR="/Volumes/ELEMENTS/imagery/fmri/group_results_paramod"
+PARDIR="/Volumes/ELEMENTS/imagery/participants"
+GROUPDIR="/Volumes/ELEMENTS/imagery/fmri/group_results_paramod_clusters"
 mkdir -p "$GROUPDIR"
-MASK="$PARTDIR/par_01/fmri/PROC_cspline/mask_group+tlrc"
+#MASK="$PARDIR/par_01/fmri/PROC_cspline/mask_group+tlrc" wrong mask
+#MASK="$PARDIR/gm_mask_work/Final_mask_unionepi+tlrc"
+MASK="/Volumes/ELEMENTS/imagery/fmri/group_results/3dMEMAcsplin_imagine_new_graymask/Clust_mask+tlrc"
 
-contrasts=( "pleasant" "neutral" "unpleasant" "Overall_Modulation" "Mod_Read_vs_Imagine" "Mod_Emotional_vs_Neutral" "Mod_Read_Emotion_vs_Neutral" "Mod_Imagine_Emotion_vs_Neutral" )
+contrasts=( "pleasant_imagine" "unpleasant_imagine" "neutral_imagine" "Overall_Modulation_imagine" "Mod_Read_vs_Imagine" "Mod_Imagine_Emotion_vs_Baseline" "Mod_Imagine_Emotion_vs_Neutral" )
 
 for contrast_name in "${contrasts[@]}"; do
-  echo "=== Building inputs for: $contrast_name ==="
-  mema_args=()
+    echo "=== Building inputs for: $contrast_name ==="
+    mema_args=()
 
-  for subdir in "$PARTDIR"/par_*; do
-    SUBJ="${subdir##*/}"
-    statsfile="$subdir/fmri/paramod_block/stats.${SUBJ}_REML+tlrc"
-    if [[ ! -f "${statsfile}.HEAD" ]]; then
-      echo "** Missing REML for $SUBJ, skipping"
-      continue
-    fi
-    mema_args+=( "$SUBJ" "${statsfile}[${contrast_name}#0_Coef]" "${statsfile}[${contrast_name}#0_Tstat]" )
-  done
+    # raw stim classes need the [1] modulation term; GLTs use [0]
+    case "$contrast_name" in
+        pleasant_imagine|unpleasant_imagine|neutral_imagine)
+            idx=1
+            ;;
+        *)
+            idx=0
+            ;;
+    esac
+
+    for subdir in "$PARDIR"/par_*; do
+        SUBJ="${subdir##*/}"
+        statsfile="$subdir/fmri/paramod_block/stats.${SUBJ}_REML+tlrc"
+        if [[ ! -f "${statsfile}.HEAD" ]]; then
+            echo "** Missing REML for $SUBJ, skipping"
+            continue
+        fi
+        mema_args+=( "$SUBJ" "${statsfile}[${contrast_name}#${idx}_Coef]" "${statsfile}[${contrast_name}#${idx}_Tstat]" )
+    done
 
   echo "   Subjects included: $(( ${#mema_args[@]} / 3 ))"
   echo "   Output prefix: $GROUPDIR/MEMA_paramod_${contrast_name}"

@@ -2,7 +2,7 @@
 
 SUBJECTS=(par_01 par_02 par_03 par_04 par_05 par_06 par_07 par_09 par_10 par_12 par_13 par_14 par_15 par_16 par_17 par_18 par_19 par_20 par_21)
 DATA_DIR="/Volumes/ELEMENTS/imagery"
-OUTPUT_DIR="${DATA_DIR}/fmri/group_analysis/iresp_grandmean"
+OUTPUT_DIR="${DATA_DIR}/fmri/group_analysis/iresp_grandmean2"
 
 mkdir -p "${OUTPUT_DIR}"
 
@@ -10,7 +10,7 @@ for COND in pleasant neutral unpleasant; do
     INPUT_FILES=()
 
     for SUB in "${SUBJECTS[@]}"; do
-        INPUT_FILES+=("${DATA_DIR}/participants/${SUB}/fmri/PROC_cspline/iresp_${COND}.${SUB}+tlrc.HEAD")
+        INPUT_FILES+=("${DATA_DIR}/participants/${SUB}/fmri/PROC_cspline_new_imagine/iresp_${COND}.${SUB}+tlrc.HEAD")
     done                         
 
     # sanity check — remove once working
@@ -18,7 +18,7 @@ for COND in pleasant neutral unpleasant; do
     printf '  %s\n' "${INPUT_FILES[@]}"
 
     3dMean \
-        -prefix "${OUTPUT_DIR}/grandmean_iresp_${COND}" \
+        -prefix "${OUTPUT_DIR}/grandmean_imagine_iresp_${COND}" \
         -sd \
         "${INPUT_FILES[@]}"
 

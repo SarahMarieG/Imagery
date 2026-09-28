@@ -1,0 +1,22 @@
+#!/bin/bash
+ROOT="/Volumes/ELEMENTS/imagery/participants"
+
+for subdir in "$ROOT"/par_*; do
+  SUBJ="${subdir##*/}"
+  f="$subdir/fmri/sswarper/anatQQ.${SUBJ}.nii"
+  [[ -f "$f" ]] || continue
+  echo "=== $SUBJ ==="
+  3dinfo -history "$f" \
+    | grep -oE '3d[A-Za-z]+|@[A-Za-z_]+' \
+    | tr '\n' ' '
+  echo
+done
+
+
+#!/bin/bash
+ROOT="/Volumes/ELEMENTS/imagery/participants"
+
+for SUBJ in par_01 par_02 par_03 par_04 par_05 par_06 par_07 par_09 par_10 par_12 par_13 par_14 par_15 par_16 par_17 par_18 par_19 par_20 par_21; do
+  raw=("$ROOT"/${SUBJ}/fmri/anat/KEIL_*.nii)
+  echo "$SUBJ: $(3dinfo -obliquity "${raw[0]}")"
+done

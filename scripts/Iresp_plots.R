@@ -5,8 +5,9 @@ library(Rmisc)
 
 
 #iresp = read.csv("group_iresp_curves.csv")
-iresp = read.csv("/Volumes/ELEMENTS/imagery/frontal_iresp_curves.csv")
-iresp = read.csv("/Volumes/ELEMENTS/imagery/group_iresp_curves.csv")
+#iresp = read.csv("/Volumes/ELEMENTS/imagery/emoclusters_iresp_curves_cspline_graymask.csv")
+#iresp = read.csv("/Volumes/ELEMENTS/imagery/fmri/group_results/3dMEMAcsplin_imagine_new/emo_neu_clust23_iresp_curves.csv")
+iresp = read.csv("/Volumes/ELEMENTS/imagery/emoclusters_iresp_curves_cspline_graymask_clust12.csv")
 
 #iresp <- iresp %>% filter(subject %in% c("par_02"))
 
@@ -64,19 +65,13 @@ summary_iresp <- iresp %>%
   labs(
     x="TR",
     y="Mean iresp",
-    title="ROI IRESP Curves"
+    title="Clust 12"
   ) +
   theme_classic(base_size=15)
 
 
 # Save figure ####
-ggsave(
-  "/Volumes/ELEMENTS/imagery/group_iresp_curves.png",
-  p,
-  width=8,
-  height=5,
-  dpi=300
-)
+#ggsave("/Volumes/ELEMENTS/imagery/group_iresp_curves.png", p,  width=8,  height=5,  dpi=300)
 
 ### Peak of each condition
 peak_table <-

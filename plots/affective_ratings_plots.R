@@ -1,7 +1,6 @@
 library(tidyverse)
 library(ggdist)
 library(patchwork)
-library(patchwork)
 
 #ratings <- readxl::read_xlsx("C:/Users/sarah/Downloads/DemoSAMPostQ.xlsx")
 ratings <- readxl::read_xlsx('/Users/sgardy/UF Dropbox/Sarah Gardy/LabFiles/Imagery/ratings4R.xlsx')
@@ -24,13 +23,13 @@ ratings_long <- ratings %>%
     rating_type = recode(rating_type, val = "Valence", ar = "Arousal")
   )
 
-write_csv(ratings_long, "/Volumes/ELEMENTS/imagery/ratings_long.csv")
+#write_csv(ratings_long, "/Volumes/ELEMENTS/imagery/ratings_long.csv")
 
 # --- 1. Summarize to category level per participant ---
 df_category <- ratings_long %>%
-  group_by(subject, rating_type, valence_category) %>%
-  summarise(mean_rating = mean(value, na.rm = TRUE), .groups = "drop") %>%
-  mutate(valence_category = factor(valence_category,
+  dplyr::group_by(subject, rating_type, valence_category) %>%
+  dplyr::summarise(mean_rating = mean(value, na.rm = TRUE), .groups = "drop") %>%
+  dplyr::mutate(valence_category = factor(valence_category,
                                    levels = c("Pleasant", "Neutral", "Unpleasant")))
 
 # --- 2. Shared elements ---
@@ -60,8 +59,8 @@ p_val <- df_category %>%
   
   stat_summary(aes(group = 1), fun = mean, geom = "line",
                color = "gray30", linewidth = 1.2) +
-  stat_summary(aes(group = 1), fun.data = mean_se, geom = "errorbar",
-               color = "gray30", width = 0, linewidth = 1.2) +
+  stat_summary(aes(group = 1), fun.data = mean_se, geom = "ribbon",
+               fill = "gray30", alpha = 0.4, color = NA) +
   stat_summary(aes(group = 1), fun = mean, geom = "point",
                color = "gray30", size = 2.5) +
   
@@ -69,7 +68,7 @@ p_val <- df_category %>%
   scale_y_continuous(limits = c(1, 9), breaks = seq(1, 9, 2),
                      expand = expansion(mult = c(0.02, 0.02))) +
   scale_x_discrete(expand = expansion(add = c(0.3, 0.3))) +
-  labs(title = "Valence", y = "Mean Rating (1–9)") +
+  labs(title = "Valence Ratings", y = "Displeasure Scale") +
   affective_theme
 
 # --- 4. Arousal panel ---
@@ -79,17 +78,17 @@ p_ar <- df_category %>%
              color = valence_category, group = subject)) +
   geom_line(aes(group = subject), color = "gray70", alpha = 0.6, linewidth = 0.4) +
   geom_point(size = 2.5, alpha = 0.6) +
+  stat_summary(aes(group = 1), fun.data = mean_se, geom = "ribbon",
+               fill = "gray30", alpha = 0.4, color = NA) +
   stat_summary(aes(group = 1), fun = mean, geom = "line",
                color = "gray30", linewidth = 1.2) +
-  stat_summary(aes(group = 1), fun.data = mean_se, geom = "errorbar",
-               color = "gray30", width = 0, linewidth = 1.2) +
   stat_summary(aes(group = 1), fun = mean, geom = "point",
                color = "gray30", size = 2.5) +
   scale_color_manual(values = category_colors) +
   scale_y_continuous(limits = c(1, 9), breaks = seq(1, 9, 2),
                      expand = expansion(mult = c(0.02, 0.02))) +
   scale_x_discrete(expand = expansion(add = c(0.3, 0.3))) +
-  labs(title = "Arousal", y = "") +
+  labs(title = "Arousal Ratings", y = "") +
   affective_theme
 
 # --- 5. Combine and save ---
@@ -108,6 +107,6 @@ p_final <- p_val + p_ar +
 
 p_final
 
-setwd('/Users/sgardy/UF Dropbox/Sarah Gardy/LabFiles/Paper Drafts/ImageryPaper')
-ggsave("affective_ratings.pdf", p_final,
+ggsave("/Users/sgardy/UF Dropbox/Sarah Gardy/LabFiles/Paper Drafts/ImageryPaper/affective_ratings.pdf", 
+       p_final,
        width = 7, height = 3, units = "in", device = pdf)

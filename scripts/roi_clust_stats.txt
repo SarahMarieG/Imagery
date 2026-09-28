@@ -1,0 +1,51 @@
+#!/bin/bash
+ROOT="/Volumes/ELEMENTS/imagery"
+CLUST="$ROOT/fmri/group_results/3dMEMAcsplin_imagine_new_graymask"
+PARDIR="$ROOT/participants"
+
+> emo-neu_clust_t.txt
+
+for par in 01 03 04 05 06 07 09 10 12 13 14 15 16 17 18 19 20 21
+do
+3dROIstats -quiet -mask "$CLUST"/Clust27_mask+tlrc \
+"$PARDIR"/par_${par}/fmri/paramod_block/stats.par_${par}_REML+tlrc'[Mod_Imagine_Emotion_vs_Neutral#0_Tstat]' \
+>> emo-neu_clust_t.txt
+done
+
+
+
+ROOT="/Volumes/ELEMENTS/imagery"
+CLUST="$ROOT/fmri/group_results/3dMEMAcsplin_imagine_new_graymask"
+PARAMEMO="$ROOT/fmri/group_results_paramod_graymask"
+
+3dABoverlap -no_automask "$CLUST"/Clust_mask+tlrc "$PARAMEMO"/Clust_parmod_mask+tlrc
+
+Group masks:
+#A           #B           #(A uni B)   #(A int B)   #(A \ B)     #(B \ A)     %(A \ B)    %(B \ A)    Rx(B/A)    Ry(B/A)    Rz(B/A)
+2847         553          3381         19           2828         534          99.3326     96.5642     1.5096     1.0072     1.8108
+
+
+
+
+
+#!/bin/bash
+ROOT="/Volumes/ELEMENTS/imagery"
+CLUST="$ROOT/fmri/group_results/3dMEMAcsplin_imagine_new_graymask"
+PARDIR="$ROOT/participants"
+
+> emo-neu_clust_overlap.txt
+
+for par in 01 03 04 05 06 07 09 10 12 13 14 15 16 17 18 19 20 21
+do
+3dABoverlap -no_automask "$CLUST"/Clust_mask+tlrc "$PARDIR"/par_${par}/fmri/paramod_block/Clust40_mask+tlrc \
+>> emo-neu_clust_overlap.txt
+done
+
+#A           #B           #(A uni B)   #(A int B)   #(A \ B)     #(B \ A)     %(A \ B)    %(B \ A)    Rx(B/A)    Ry(B/A)    Rz(B/A)
+2847         2163         4992         18           2829         2145         99.3678     99.1678     0.5267     0.5047     2.5006
+
+#A           #B           #(A uni B)   #(A int B)   #(A \ B)     #(B \ A)     %(A \ B)    %(B \ A)    Rx(B/A)    Ry(B/A)    Rz(B/A)
+2847         416          3263         0            2847         416          100.0000     100.0000     0.8707     0.8661     1.5507
+
+
+

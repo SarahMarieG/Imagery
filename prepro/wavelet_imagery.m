@@ -1,13 +1,13 @@
 %% Wavelet and Plot PNU groups
-cd /Volumes/ELEMENTS/imagery/eeg
-baseDir = '/Volumes/ELEMENTS/imagery/eeg/';
+cd /Volumes/ELEMENTS/imagery/participants/
+baseDir = '/Volumes/ELEMENTS/imagery/participants';
 
 %%
 parFolders = dir(fullfile(baseDir, 'par_*'));
 groupNames = {'Neutral_Merged', 'Pleasant_Merged', 'Unpleasant_Merged'};
-
+%%
 for p = 1:length(parFolders)
-    currentParDir = fullfile(parFolders(p).folder, parFolders(p).name);
+    currentParDir = fullfile(parFolders(p).folder, parFolders(p).name, "eeg");
     
     for g = 1:length(groupNames)
         matfile = fullfile(currentParDir, [parFolders(p).name, '_', groupNames{g}, '.mat']);

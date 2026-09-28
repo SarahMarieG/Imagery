@@ -1,18 +1,19 @@
-## Used this to create emotional-neutral contrast that was not included in afniprocpy
-
 #!/usr/bin/env bash
 ROOT="/Volumes/ELEMENTS/imagery"
 PARDIR="$ROOT/participants"
+
+## Used this to create contrasts not included in afniprocpy; 
+#see PROC_cspline_new_imagine REML command for appended contrasts not included here
 
 
 for subdir in "$PARDIR"/par_*; do
   SUBJ="${subdir##*/}"
   fmridir="$subdir/fmri"
   
-  mkdir -p "$fmridir/PROC_cspline"
+  mkdir -p "$fmridir/PROC_cspline_new_imagine"
 
   indir="$fmridir/PROC_cspline"
-  outdir="$fmridir/PROC_cspline"
+  outdir="$fmridir/PROC_cspline_new_imagine"
 
   [[ -d "$indir" ]] || { echo "No PROC dir for $SUBJ, skipping"; continue; }
   cd "$indir" || continue
@@ -68,11 +69,11 @@ for subdir in "$PARDIR"/par_*; do
     -iresp 2 "$outdir/iresp_neutral.${SUBJ}" \
     -iresp 3 "$outdir/iresp_unpleasant.${SUBJ}" \
     -fout -tout \
-    -gltsym 'SYM: 0.333*pleasant +0.333*unpleasant +0.333*neutral' -glt_label 1 allconds \
-    -gltsym 'SYM: +pleasant -neutral'               -glt_label 2 pleasant-neutral \
-    -gltsym 'SYM: +unpleasant -neutral'             -glt_label 3 unpleasant-neutral \
-    -gltsym 'SYM: +pleasant -unpleasant'            -glt_label 4 pleasant-unpleasant \
-    -gltsym 'SYM: +pleasant +unpleasant -2*neutral' -glt_label 5 emotional-neutral \
+    -gltsym 'SYM: +0.5*pleasant[2..5] +0.5*unpleasant[2..5]' -glt_label 1 imagine_emotional \
+    -gltsym 'SYM: 0.0833333*pleasant[2..5] +0.0833333*unpleasant[2..5] +0.0833333*neutral[2..5]' -glt_label 2 imagine_allconds \
+    -gltsym 'SYM: +0.25*pleasant[2..5] -0.25*neutral[2..5]' -glt_label 3 imagine_pleasant-neutral \
+    -gltsym 'SYM: +0.25*unpleasant[2..5] -0.25*neutral[2..5]' -glt_label 4 imagine_unpleasant-neutral \
+    -gltsym 'SYM: +0.125*pleasant[2..5] +0.125*unpleasant[2..5] -0.25*neutral[2..5]' -glt_label 5 imagine_emotional-neutral \
     -x1D "$outdir/X.xmat.1D" \
     -xjpeg "$outdir/X.jpg" \
     -x1D_uncensored "$outdir/X.nocensor.xmat.1D" \
@@ -85,14 +86,14 @@ for subdir in "$PARDIR"/par_*; do
     continue
   fi
 
-  echo "   Executing REML fit automatically..."
+  #echo "   Executing REML fit automatically..."
 
-  tcsh -x stats.REML_cmd
+  #tcsh -x stats.REML_cmd
 
-  if [[ $? -ne 0 ]]; then
-    echo "** 3dREMLfit failed for $SUBJ"
-    continue
-  fi
+  #if [[ $? -ne 0 ]]; then
+  #  echo "** 3dREMLfit failed for $SUBJ"
+  #  continue
+  #fi
 
   echo "=== Done: $SUBJ ==="
 done

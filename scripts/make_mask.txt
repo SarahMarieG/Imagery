@@ -1,0 +1,61 @@
+#!/bin/bash
+PARDIR="/Volumes/ELEMENTS/imagery/participants"
+
+for subdir in "$PARDIR"/par_*; do
+  SUBJ=$(basename "$subdir")
+  procdir="$subdir/fmri/PROC_cspline"
+  full="$procdir/full_mask.${SUBJ}+tlrc"
+  anat="$procdir/mask_anat.${SUBJ}+tlrc"
+  out="$procdir/mask_epi_anat.${SUBJ}"
+
+  if [[ -f "${full}.HEAD" && -f "${anat}.HEAD" ]]; then
+    3dcalc -a "$full" -b "$anat" -expr 'step(a)*step(b)' -prefix "$out" -overwrite
+  else
+    echo "!! missing full_mask or mask_anat for $SUBJ — skipping"
+  fi
+done
+
+
+
+
+
+PARDIR="/Volumes/ELEMENTS/imagery/participants"
+WORKDIR="$PARDIR/gm_mask_work"
+
+input_masks=()
+for subdir in "$PARDIR"/par_*; do
+
+  [ -d "$subdir" ] || continue
+
+	SUBJ=$(basename "$subdir")
+	f="$subdir/fmri/PROC_cspline/mask_epi_anat.${SUBJ}+tlrc.HEAD"
+		if [ -f "$f" ]; then
+		input_masks+=("$f")
+	else
+		echo "missing full_mask for $SUBJ"
+	fi
+done
+
+echo "Found ${#input_masks[@]} subject masks"
+
+
+if [ ${#input_masks[@]} -gt 0 ]; then
+3dmask_tool -input "${input_masks[@]}" -prefix "$WORKDIR/mask_epi_anat_group" -union -overwrite
+else
+    echo "Error: No masks found. Skipping 3dmask_tool."
+fi
+
+
+TPL="/Volumes/ELEMENTS/imagery/masks_and_templates/MNI152_2009_template_SSW.nii.gz"
+
+3dresample -master "$WORKDIR/mask_epi_anat_group+tlrc" \
+    -input "${TPL}[4]" \
+    -prefix "$WORKDIR/GM_mask_resam_unionepi" -overwrite
+
+3dcalc -a "$WORKDIR/GM_mask_resam_unionepi+tlrc" -expr 'step(a-0.5)' \
+    -prefix "$WORKDIR/GM_mask_bin_unionepi" -overwrite
+
+3dcalc -a "$WORKDIR/mask_epi_anat_group+tlrc" -b "$WORKDIR/GM_mask_bin_unionepi+tlrc" \
+    -expr 'step(a)*step(b)' -prefix "$WORKDIR/FINAL_mask_unionepi" -overwrite
+
+echo "Done. Final mask for 3dMEMA: $WORKDIR/FINAL_mask_unionepi+tlrc"

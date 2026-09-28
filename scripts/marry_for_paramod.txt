@@ -1,31 +1,48 @@
-#Use this to merge timing with alpha for parametric modulation
-
 #!/bin/bash
 
-eeg_dir="/Volumes/ELEMENTS/imagery/eeg"
-timing_dir="/Volumes/ELEMENTS/imagery/fmri/time_cols"
+#Use this to merge timing with alpha for parametric modulation
 
-# Fill in which participants are O1 vs O2
-declare -A order_map
-for sub in 01 02 03 04 05 06 07 08 09 10; do order_map[$sub]="O1"; done
-for sub in 11 12 13 14 15 16 17 18 19 20 21; do order_map[$sub]="O2"; done
+par_dir="/Volumes/ELEMENTS/imagery/participants"
+#timing_dir="/Volumes/ELEMENTS/imagery/fmri/time_cols"
+
+
 
 conditions=("pleasant" "neutral" "unpleasant")
 
 for sub in $(seq -w 01 21); do
 
-    order=${order_map[$sub]}
-    eeg_folder="${eeg_dir}/par_${sub}"
-    tim_folder="${timing_dir}/par_${sub}"
+    #order=${order_map[$sub]}
+    par_folder="${par_dir}/par_${sub}"
 
-    for i in 0 1 2; do
-        cond=${conditions[$i]}
+  # figure out this subject's order by checking which timing file exists
+    if [[ -f "${par_folder}/fmri/O1.pleasant.LOCAL.txt" ]]; then
+        order="O1"
+    elif [[ -f "${par_folder}/fmri/O2.pleasant.LOCAL.txt" ]]; then
+        order="O2"
+    else
+        echo "MISSING: no O1 or O2 pleasant timing file for par_${sub} — skipping"
+        continue
+    fi
 
-        timing_tool.py \
-            -timing   ${tim_folder}/${order}.${cond}.LOCAL.txt \
-            -marry_AM ${eeg_folder}/alpha_trls_4parammod_${cond}_centered.txt \
-            -write_timing ${eeg_folder}/${cond}_AM.txt
+       for i in 0 1 2; do
+    cond=${conditions[$i]}
 
-        echo "Done: par_${sub} ${cond}"
+        read_timing="${par_folder}/fmri/${order}.${cond}.LOCAL.txt"
+        imagine_timing="${par_folder}/fmri/${order}.${cond}.IMAGINE.txt"
+
+        # imagine onset = read onset + 9s (fixed read-block duration)
+        timing_tool.py -timing "$read_timing" \
+                        -add_offset 9.0 \
+                        -write_timing "$imagine_timing"
+
+        1dMarry "$read_timing" \
+                "${par_folder}/alpha4parmod_${cond}_med.txt" \
+                > "${par_folder}/${cond}_read_AM_new.txt"
+
+        1dMarry "$imagine_timing" \
+                "${par_folder}/alpha4parmod_${cond}_med.txt" \
+                > "${par_folder}/${cond}_imagine_AM_new.txt"
+
+        echo "Done: par_${sub} ${cond} (read + imagine)"
     done
 done

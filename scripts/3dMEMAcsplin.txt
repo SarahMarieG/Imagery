@@ -1,18 +1,25 @@
 #!/usr/bin/env bash 
 
+#Sub-bricks #40–54 are the original, un-rescaled GLTs from first 3dDeconvolve run — imagine_emotional, imagine_allconds, imagine_pleasant-neutral, imagine_unpleasant-neutral, imagine_emotional-neutral. These carry the unnormalized-weight problem (e.g., imagine_emotional here is still the old ×4-inflated sum, not the corrected average).
+#Sub-bricks #55–81 are the new set from 3dREMLfit rerun — all 9 _avg/_auc labeled GLTs, correctly scaled
+
 PARTDIR="/Volumes/ELEMENTS/imagery/participants" 
-GROUPDIR="/Volumes/ELEMENTS/imagery/fmri/group_results/3dMEMAcsplin_new" 
+GROUPDIR="/Volumes/ELEMENTS/imagery/fmri/group_results/3dMEMAcsplin_imagine_new_graymask" 
+#MASK="$PARTDIR/par_01/fmri/PROC_cspline/mask_group+tlrc"
+#MASK="$PARTDIR/gm_mask_work/mask_group_GM_0.5+tlrc"
+MASK="$PARTDIR/gm_mask_work/FINAL_mask_unionepi+tlrc"
+
 mkdir -p "$GROUPDIR" 
 
-contrasts=( "allconds" "pleasant-neutral" "unpleasant-neutral" "pleasant-unpleasant" "emotional-neutral" )
+contrasts=( "imagine_allconds_avg" "imagine_emotional-neutral_avg" "imagine_emotional_avg" "imagine_emotional-neutral_auc" "imagine_emotional_auc" )
 
 for contrast_name in "${contrasts[@]}"; do
-  echo "=== Building inputs for: $contrast_name ==="
+  echo "=== Building inputs for: $contrast_name ==="+4
   mema_args=()
 
   for subdir in "$PARTDIR"/par_*; do
     SUBJ="${subdir##*/}"
-    statsfile="$subdir/fmri/PROC_cspline/stats.${SUBJ}_REML+tlrc"
+    statsfile="$subdir/fmri/PROC_cspline_new_imagine/stats.${SUBJ}_REML+tlrc"
     if [[ ! -f "${statsfile}.HEAD" ]]; then
       echo "** Missing REML for $SUBJ, skipping"
       continue
@@ -23,7 +30,7 @@ for contrast_name in "${contrasts[@]}"; do
   echo "   Subjects included: $(( ${#mema_args[@]} / 3 ))"
   echo "   Output prefix: $GROUPDIR/MEMA_csp_${contrast_name}"
 
-  3dMEMA -prefix "$GROUPDIR/MEMA_csp_${contrast_name}" -jobs 4 -mask "$PARTDIR/par_01/fmri/PROC_cspline/mask_group+tlrc" -HKtest -set "$contrast_name" "${mema_args[@]}" -residual_Z
+  3dMEMA -prefix "$GROUPDIR/MEMA_csp_${contrast_name}" -jobs 4 -mask "$MASK" -HKtest -set "$contrast_name" "${mema_args[@]}" -residual_Z
 
   echo "=== Done: $contrast_name ==="
 done

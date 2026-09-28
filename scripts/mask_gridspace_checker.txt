@@ -1,0 +1,19 @@
+#Check to see if full mask and mask_anat are on the same grid. Will tell you if they are on a different grid
+
+
+
+PARDIR="/Volumes/ELEMENTS/imagery/participants"
+for subdir in "$PARDIR"/par_*; do
+  SUBJ=$(basename "$subdir")
+  f1="$subdir/fmri/PROC_cspline/full_mask.${SUBJ}+tlrc.HEAD"
+  f2="$subdir/fmri/PROC_cspline/mask_anat.${SUBJ}+tlrc.HEAD"
+  if [[ -f "$f1" && -f "$f2" ]]; then
+    d1=$(3dinfo -n4 "$f1")
+    d2=$(3dinfo -n4 "$f2")
+    if [[ "$d1" != "$d2" ]]; then
+      echo "GRID MISMATCH: $SUBJ ($d1 vs $d2)"
+    fi
+  else
+    echo "MISSING FILE: $SUBJ"
+  fi
+done

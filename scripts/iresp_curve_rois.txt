@@ -2,20 +2,25 @@
 ROOT="/Volumes/ELEMENTS/imagery"
 PARDIR="$ROOT/participants"
 
+#brain="Precuneus"
+brain="emoclusters"
+
 #GLOBAL_MASK="/Volumes/ELEMENTS/imagery/masks_and_templates/visual_roi+tlrc"
-#GLOBAL_MASK="/Volumes/ELEMENTS/imagery/fmri/group_analysis/3dMEMAcsplin_new/MEMA_clusters_map+tlrc"
-GLOBAL_MASK="/Volumes/ELEMENTS/imagery/fmri/group_analysis/3dMEMAcsplin_new/Clust_mask+tlrc"
+#GLOBAL_MASK="/Volumes/ELEMENTS/imagery/fmri/group_results/group_results_paramod/Clust_mask_0004+tlrc"
+GLOBAL_MASK="/Volumes/ELEMENTS/imagery/fmri/group_results/3dMEMAcsplin_imagine_new_graymask/Clust_mask+tlrc.HEAD"
 
 
 CONDITIONS=("pleasant" "neutral" "unpleasant")
 
-CSV_OUT="$ROOT/frontal_iresp_curves.csv"
+CSV_OUT="$ROOT/${brain}_iresp_curves_cspline_graymask_clust12.csv"
 
 echo "subject,condition,time,value" > "$CSV_OUT"
 
+
+# Loops over subject and strips text up thru "/" to give par name
 for subdir in $PARDIR/par_*; do
       SUBJ="${subdir##*/}"
-      DATA_DIR="$PARDIR/$SUBJ/fmri/PROC_cspline"
+      DATA_DIR="$PARDIR/$SUBJ/fmri/PROC_cspline_new_imagine"
       MASTER_FILE="${DATA_DIR}/iresp_neutral.${SUBJ}+tlrc"
         
       if [ ! -f "${MASTER_FILE}.HEAD" ] && [ ! -f "${MASTER_FILE}" ]; then
@@ -24,7 +29,7 @@ for subdir in $PARDIR/par_*; do
           continue
       fi
         
-      RESAMPLED_MASK="${DATA_DIR}/${SUBJ}_vis_mask_resampled+tlrc"
+      RESAMPLED_MASK="${DATA_DIR}/${SUBJ}_${brain}_mask_resampled+tlrc"
         
       echo "Resampling ROI..."
 
