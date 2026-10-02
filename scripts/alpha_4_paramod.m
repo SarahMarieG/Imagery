@@ -91,7 +91,7 @@ for sub = 1:num_subs
     plesumall = [plesumall plesum];
     
     ntrsum = sum(TF_ntr, 1);
-    ntrsumall = [ntrsumall ntrsum];
+    ntrffsumall = [ntrsumall ntrsum];
 
     uplsum = sum(TF_upl, 1);
     uplsumall = [uplsumall uplsum];
