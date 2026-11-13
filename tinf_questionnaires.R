@@ -14,7 +14,6 @@ selected_qs <- tinf_qs %>% select(
 
 
 #Questionnaires included
-# STAI-Trait 0-4: 1, 3, 6, 7, 10, 13, 14, 16, 19 need reverse scoring
 tinf_qnew <- rename(selected_qs, STAI_Trait_1=STAI_Trait_1...34, 
                   STAI_Trait_2=STAI_Trait_2...35, WHODAS_1=STAI_Trait_1...123, 
                   WHODAS_2=STAI_Trait_2...124, WHODAS_3=Q86_5,	WHODAS_4=Q86_6,	
@@ -25,14 +24,33 @@ tinf_qnew <- rename(selected_qs, STAI_Trait_1=STAI_Trait_1...34,
 )
 
 
+df <- df %>% rename_all(~ str_replace(., "^Q2_", "LSAS_"))
+
+# STAI-Trait Never=0 to almost always = 4: 1, 3, 6, 7, 10, 13, 14, 16, 19 need reverse scoring
 STAI <- tinf_qnew %>% select(ID, starts_with('STAI_'))
 WHODAS <- tinf_qnew %>% select(ID, starts_with('WHODAS'))
 LSAS_anx <- tinf_qnew %>% select(ID, starts_with('Q2_'))
+
+
 LSAS_avoid <-tinf_qnew %>% select(ID, starts_with('Q3_'))
+
+
 BDI <-tinf_qnew %>% select(ID, starts_with('BDI_'))
+
+#reverse 1,3,5,9,10,12,14,16,17,19 higher score is worse
 PANAS <- tinf_qnew %>% select(ID, starts_with('Q47_'))
+
+#handedness
+EHI <- tinf_qnew %>% select(ID, starts_with('Q48_'))
+
+#1 = very true...4=very false for me
+# reverse 8, 11, 13, 15?, 16, 19? 24
 BISBAS <- tinf_qnew %>% select(ID, starts_with('Q51_'))
+
+#1=rarely, 4 = most/all the time; higher = more negative
+# reverse 4, 8, 12, 16
 CES_D <- tinf_qnew %>% select(ID, starts_with('Q53_'))
 
-
+# 1=strongly disagree, 7=strongly agree (higher = more positive)
+# reverse code 1,2, 6?, 10?, 14 
 BFI_S <- tinf_qnew %>% select(ID, starts_with('Q54_'))
